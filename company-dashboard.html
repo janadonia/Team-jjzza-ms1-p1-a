@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard - GUC Internship System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="data.js" defer></script>
+    <script src="script.js" defer></script> 
+    <script src="company.js" defer></script>
+</head>
+<body id="company-dashboard-page">
+    
+
+    <button id="notification-panel-toggle-btn" class="action-btn" title="Notifications">
+        🔔 <span id="notification-unread-count">0</span>
+    </button>
+
+
+    <div id="notification-center-panel">
+        <div id="notification-panel-header">
+            <h3>Notifications</h3>
+            <button id="mark-all-read-btn" class="action-btn text-xs">Mark All Read</button>
+            <span id="close-notification-panel-btn" class="close-modal-btn">&times;</span>
+        </div>
+        <div id="notifications-list-container">
+            <p>No new notifications.</p>
+        </div>
+    </div>
+
+    <header class="dashboard-header">
+        <h1>GUC Internship System - Company Portal</h1>
+        <nav>
+            <div class="nav-left">
+                Welcome, <span id="user-name" style="font-weight:bold;">Company Rep</span>!
+            </div>
+            <div class="nav-center">
+                <a href="#post-internship" class="nav-link">Post Internship</a>
+                <a href="#view-internships" class="nav-link">My Internships</a>
+                <a href="#company-profile" class="nav-link">My Profile</a>
+            </div>
+            <div class="nav-right">
+                <button id="logout-btn" class="action-btn reject-btn">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="dashboard-main">
+        <h2 id="page-title">Company Dashboard</h2>
+
+        <!-- Post Internship Section -->
+        <section id="post-internship" class="dashboard-section">
+            <h3>Post New Internship / Edit Internship</h3>
+            <form id="post-internship-form">
+                <input type="hidden" id="internshipIdToEdit" name="internshipIdToEdit">
+                <div class="form-group">
+                    <label for="jobTitle">Job Title:</label>
+                    <input type="text" id="jobTitle" name="jobTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="duration">Duration (e.g., 3 months, 6 weeks):</label>
+                    <input type="text" id="duration" name="duration" required>
+                </div>
+                 <div class="form-group">
+                    <label for="industry">Industry:</label>
+                    <input type="text" id="industry" name="industry" placeholder="e.g., Technology, Finance" required>
+                </div>
+                <div class="form-group">
+                    <label for="paid">Paid Internship?</label>
+                    <select id="paid" name="paid" required>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="form-group" id="salary-group" style="display: block;">
+                    <label for="salary">Expected Salary (if paid, e.g., 3000 EGP):</label>
+                    <input type="text" id="salary" name="salary">
+                </div>
+                <div class="form-group">
+                    <label for="skillsRequired">Skills Required (comma-separated):</label>
+                    <input type="text" id="skillsRequired" name="skillsRequired" placeholder="e.g., HTML, CSS, Teamwork" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Job Description:</label>
+                    <textarea id="description" name="description" rows="5" required></textarea>
+                </div>
+                 <div class="form-group">
+                    <label for="applicationDeadline">Application Deadline (Optional):</label>
+                    <input type="date" id="applicationDeadline" name="applicationDeadline">
+                </div>
+                <button type="submit" id="submit-internship-btn" class="action-btn">Post Internship</button>
+                <button type="button" id="clear-internship-form-btn" class="action-btn" style="background-color:#ccc;">Clear Form</button>
+            </form>
+        </section>
+
+        <!-- View Internships Section -->
+        <section id="view-internships" class="dashboard-section">
+            <h3>My Company's Internship Posts</h3>
+            <input type="text" id="internship-search" placeholder="Search by Job Title..." style="width: 100%; padding: 8px; margin-bottom: 15px;" />
+            <input type="hidden" id="internshipIdToEdit" name="internshipIdToEdit">
+            <div class="filters" style="margin-bottom: 20px;">
+                <select id="filter-industry">
+                    <option value="">All Industries</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Healthcare">Healthcare</option>
+                </select>
+                <select id="filter-duration">
+                    <option value="">All Durations</option>
+                    <option value="3 months">3 months</option>
+                    <option value="6 weeks">6 weeks</option>
+                    <option value="6 months">6 months</option>
+                </select>
+                <select id="filter-paid">
+                    <option value="">Any (Paid/Unpaid)</option>
+                    <option value="yes">Paid</option>
+                    <option value="no">Unpaid</option>
+                </select>
+                <button id="apply-filters-btn" class="action-btn">Apply Filters</button>
+                <button id="reset-filters-btn" class="action-btn cancel-btn">Reset Filters</button>
+            </div>
+            <div id="company-internships-list">
+                <p>Loading your internships...</p>
+            </div>
+        </section>
+
+        <section id="applicant-status" class="dashboard-section">
+    <h3>Applicant Status</h3>
+    <div class="applicant-status-list">
+        <!-- Applicant 1 -->
+        <div class="applicant-status-item">
+            <p><strong>Applicant Name:</strong> John Doe</p>
+            <div class="status-buttons">
+                <button class="status-btn" data-applicant="john-doe" data-status="accepted" onclick="changeStatus('john-doe', 'accepted')">Accepted</button>
+                <button class="status-btn" data-applicant="john-doe" data-status="rejected" onclick="changeStatus('john-doe', 'rejected')">Rejected</button>
+                <button class="status-btn" data-applicant="john-doe" data-status="finalized">Finalized</button>
+            </div>
+        </div>
+
+        <!-- Applicant 2 -->
+        <div class="applicant-status-item">
+            <p><strong>Applicant Name:</strong> Jana Zaky</p>
+            <div class="status-buttons">
+                <button class="status-btn" data-applicant="jana-zaky" data-status="accepted" onclick="changeStatus('jana-zaky', 'accepted')">Accepted</button>
+                <button class="status-btn" data-applicant="jana-zaky" data-status="rejected" onclick="changeStatus('jana-zaky', 'rejected')">Rejected</button>
+                <button class="status-btn" data-applicant="jana-zaky" data-status="finalized">Finalized</button>
+            </div>
+        </div>
+
+        <!-- Add other applicants similarly -->
+    </div>
+</section>
+
+<!-- Email Notification Section -->
+<section id="email-notification" class="dashboard-section" style="display: none;">
+    <h3>Email Notification</h3>
+    <p id="email-message">Your application status has been updated. You will receive an email confirmation shortly.</p>
+</section>
+
+
+        <!-- Internship Students Status Section -->
+        <section id="internship-students-status" class="dashboard-section">
+            <h3>Internship Students Status</h3>
+            <div class="filters">
+                <input type="text" id="student-search" placeholder="Search by Name or Job Title..." onkeyup="searchInterns()" />
+            </div>
+
+            <div class="student-status-item" id="student-jana">
+                <p><strong>Student:</strong> Jana Zaky</p>
+                <p><strong>Job Title:</strong> Software Developer</p>
+                <select id="status-jana" onchange="handleStatusChange('jana', this.value)">
+                    <option value="current-intern">Current Intern</option>
+                    <option value="internship-complete">Internship Complete</option>
+                </select>
+            </div>
+
+            <div class="student-status-item" id="student-ahmed">
+                <p><strong>Student:</strong> Ahmed Adel</p>
+                <p><strong>Job Title:</strong> Web Developer</p>
+                <select id="status-ahmed" onchange="handleStatusChange('ahmed', this.value)">
+                    <option value="current-intern">Current Intern</option>
+                    <option value="internship-complete">Internship Complete</option>
+                </select>
+            </div>
+
+            <div class="student-status-item" id="student-mariam">
+                <p><strong>Student:</strong> Mariam Samir</p>
+                <p><strong>Job Title:</strong> Data Scientist</p>
+                <select id="status-mariam" onchange="handleStatusChange('mariam', this.value)">
+                    <option value="current-intern">Current Intern</option>
+                    <option value="internship-complete">Internship Complete</option>
+                </select>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="dashboard-footer">
+        <p>&copy; 2025 GUC Internship System. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

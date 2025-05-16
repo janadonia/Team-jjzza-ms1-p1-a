@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Faculty Academics Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6eef0;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2b6cb0;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .dashboard-content {
+      padding: 30px;
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 700px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      text-align: left;
+    }
+
+    .report-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .report-buttons button {
+      background-color: #2b6cb0;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .report-buttons button:hover {
+      background-color: #1e4e8c;
+    }
+
+    .report-card {
+      display: none;
+    }
+
+    .report-card.active {
+      display: block;
+    }
+
+    .status-filter {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  
+    <header>
+    <h1>Faculty Academics Dashboard</h1>
+    <!-- Logout Button -->
+    <button id="logout-button" onclick="logout()" style="position: absolute; top: 20px; right: 20px; background-color: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+      Logout
+    </button>
+  </header>
+
+
+  <div class="dashboard-content">
+    <!-- Internship Reports Section -->
+    <div class="card">
+      <h2>Internship Reports</h2>
+      <div class="report-buttons">
+        <button onclick="showReport('pepsi')">PepsiCo</button>
+        <button onclick="showReport('nestle')">Nestlé</button>
+        <button onclick="showReport('sewedy')">El Sewedy</button>
+      </div>
+
+      <div id="report-pepsi" class="report-card">
+        <h3>Internship Report: PepsiCo</h3>
+        <p><strong>Student:</strong> Ahmed Mahmoud</p>
+        <p><strong>Title:</strong> Marketing Automation at PepsiCo</p>
+        <p><strong>Introduction:</strong> This report discusses the integration of automated marketing analytics tools at PepsiCo’s Cairo office.</p>
+        <p><strong>Internship Dates:</strong> June 1, 2024 – August 31, 2024</p>
+        <p><strong>Status:</strong> <span id="status-pepsi">Pending</span></p>
+        <select id="select-pepsi" onchange="updateStatus('pepsi', this.value)">
+          <option value="Pending">Pending</option>
+          <option value="Accepted">Accepted</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Flagged">Flagged</option>
+        </select>
+        <button onclick="downloadReport('PepsiCo')">Download PDF</button>
+      </div>
+
+      <div id="report-nestle" class="report-card">
+        <h3>Internship Report: Nestlé</h3>
+        <p><strong>Student:</strong> Mariam Samir</p>
+        <p><strong>Title:</strong> Quality Control in Dairy Production</p>
+        <p><strong>Introduction:</strong> The internship at Nestlé’s production facility focused on hygiene procedures and product quality testing in dairy lines.</p>
+        <p><strong>Internship Dates:</strong> July 1, 2024 – September 15, 2024</p>
+        <p><strong>Status:</strong> <span id="status-nestle">Pending</span></p>
+        <select id="select-nestle" onchange="updateStatus('nestle', this.value)">
+          <option value="Pending">Pending</option>
+          <option value="Accepted">Accepted</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Flagged">Flagged</option>
+        </select>
+        <button onclick="downloadReport('Nestlé')">Download PDF</button>
+      </div>
+
+      <div id="report-sewedy" class="report-card">
+        <h3>Internship Report: El Sewedy Electric</h3>
+        <p><strong>Student:</strong> Youssef El Sayed</p>
+        <p><strong>Title:</strong> Smart Grid Systems at El Sewedy</p>
+        <p><strong>Introduction:</strong> This report explains the student’s work on implementing smart metering systems and grid monitoring dashboards during the internship.</p>
+        <p><strong>Internship Dates:</strong> May 15, 2024 – August 1, 2024</p>
+        <p><strong>Status:</strong> <span id="status-sewedy">Pending</span></p>
+        <select id="select-sewedy" onchange="updateStatus('sewedy', this.value)">
+          <option value="Pending">Pending</option>
+          <option value="Accepted">Accepted</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Flagged">Flagged</option>
+        </select>
+        <button onclick="downloadReport('El Sewedy')">Download PDF</button>
+      </div>
+    </div>
+
+    <!-- View Reports by Status Section -->
+    <div class="card status-filter">
+      <h2>View Reports by Status</h2>
+      <label for="status-filter"><strong>Choose a status:</strong></label>
+      <select id="status-filter" onchange="filterReportsByStatus(this.value)">
+        <option value="">-- Select Status --</option>
+        <option value="Pending">Pending</option>
+        <option value="Accepted">Accepted</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Flagged">Flagged</option>
+      </select>
+      <div id="filtered-reports" style="margin-top: 20px;"></div>
+    </div>
+
+    <!-- Report Evaluation Section -->
+<div class="card" style="margin-top: 40px;">
+  <h2>Report Evaluation</h2>
+  <label for="evaluation-select"><strong>Choose a company:</strong></label>
+  <select id="evaluation-select" onchange="showEvaluation(this.value)">
+    <option value="">-- Select Company --</option>
+    <option value="pepsi">PepsiCo</option>
+    <option value="nestle">Nestlé</option>
+    <option value="sewedy">El Sewedy Electric</option>
+  </select>
+
+  <!-- PepsiCo -->
+  <div id="evaluation-pepsi" style="display:none; margin-top: 20px;">
+    <h3>PepsiCo</h3>
+    <p><strong>Student:</strong> Ahmed Mahmoud</p>
+    <p><strong>Company:</strong> PepsiCo</p>
+    <p><strong>Main Supervisor:</strong> Eng. Laila Hassan</p>
+    <p><strong>Internship Duration:</strong> June 1, 2024 – August 31, 2024</p>
+    <p><strong>Report Status:</strong> <span id="evaluation-status-pepsi"></span></p>
+
+    <!-- Comment Box for Flagged or Rejected status -->
+    <div id="comment-pepsi" class="comment-section" style="display:none;">
+      <label for="comment-text-pepsi"><strong>Enter clarification for rejection or flag:</strong></label>
+      <textarea id="comment-text-pepsi" style="width: 100%; height: 60px;"></textarea>
+      <button onclick="saveComment('pepsi')" style="margin-top: 10px;">Save Clarification</button>
+    </div>
+
+    <!-- Display Saved Comment -->
+    <div id="saved-comment-pepsi" style="margin-top: 10px; display:none;">
+      <strong>Clarification:</strong>
+      <p id="display-comment-pepsi"></p>
+    </div>
+  </div>
+
+  <!-- Nestlé -->
+  <div id="evaluation-nestle" style="display:none; margin-top: 20px;">
+    <h3>Nestlé</h3>
+    <p><strong>Student:</strong> Mariam Samir</p>
+    <p><strong>Company:</strong> Nestlé</p>
+    <p><strong>Main Supervisor:</strong> Dr. Mohamed Refaat</p>
+    <p><strong>Internship Duration:</strong> July 1, 2024 – September 15, 2024</p>
+    <p><strong>Report Status:</strong> <span id="evaluation-status-nestle"></span></p>
+
+    <!-- Comment Box for Flagged or Rejected status -->
+    <div id="comment-nestle" class="comment-section" style="display:none;">
+      <label for="comment-text-nestle"><strong>Enter clarification for rejection or flag:</strong></label>
+      <textarea id="comment-text-nestle" style="width: 100%; height: 60px;"></textarea>
+      <button onclick="saveComment('nestle')" style="margin-top: 10px;">Save Clarification</button>
+    </div>
+
+    <!-- Display Saved Comment -->
+    <div id="saved-comment-nestle" style="margin-top: 10px; display:none;">
+      <strong>Clarification:</strong>
+      <p id="display-comment-nestle"></p>
+    </div>
+  </div>
+
+  <!-- El Sewedy Electric -->
+  <div id="evaluation-sewedy" style="display:none; margin-top: 20px;">
+    <h3>El Sewedy Electric</h3>
+    <p><strong>Student:</strong> Youssef El Sayed</p>
+    <p><strong>Company:</strong> El Sewedy Electric</p>
+    <p><strong>Main Supervisor:</strong> Eng. Karim Adel</p>
+    <p><strong>Internship Duration:</strong> May 15, 2024 – August 1, 2024</p>
+    <p><strong>Report Status:</strong> <span id="evaluation-status-sewedy"></span></p>
+
+    <!-- Comment Box for Flagged or Rejected status -->
+    <div id="comment-sewedy" class="comment-section" style="display:none;">
+      <label for="comment-text-sewedy"><strong>Enter clarification for rejection or flag:</strong></label>
+      <textarea id="comment-text-sewedy" style="width: 100%; height: 60px;"></textarea>
+      <button onclick="saveComment('sewedy')" style="margin-top: 10px;">Save Clarification</button>
+    </div>
+
+    <!-- Display Saved Comment -->
+    <div id="saved-comment-sewedy" style="margin-top: 10px; display:none;">
+      <strong>Clarification:</strong>
+      <p id="display-comment-sewedy"></p>
+    </div>
+  </div>
+</div>
+<!-- Statistics Section: Real-Time Statistics -->
+<div class="card" style="margin-top: 40px;">
+  <h2>Real-Time Statistics</h2>
+  <p><strong>Accepted Reports:</strong> <span id="accepted-count">0</span></p>
+  <p><strong>Rejected Reports:</strong> <span id="rejected-count">0</span></p>
+  <p><strong>Flagged Reports:</strong> <span id="flagged-count">0</span></p>
+  <p><strong>Average Review Time (Days):</strong> <span id="avg-review-time">5</span></p>
+  <p><strong>Most Frequently Used Courses:</strong> <span id="most-used-courses">Course A, Course B</span></p>
+  <p><strong>Top Rated Companies:</strong> <span id="top-rated-companies">Company 1, Company 2</span></p>
+  <p><strong>Top Companies by Internship Count:</strong> <span id="top-companies-count">Company 1, Company 3</span></p>
+
+  <!-- Generate Report Button -->
+  <button onclick="generateReport()" style="margin-top: 20px; background-color: #2b6cb0; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Generate Report</button>
+</div>
+
+
+  <script>
+    function showReport(reportId) {
+      const reports = document.querySelectorAll('.report-card');
+      reports.forEach(r => r.classList.remove('active'));
+      const selected = document.getElementById(`report-${reportId}`);
+      if (selected) selected.classList.add('active');
+    }
+
+   function updateStatus(reportId, status) {
+  localStorage.setItem(`status-${reportId}`, status); // Save status in localStorage
+  document.getElementById(`status-${reportId}`).textContent = status;
+
+  // Show or hide the comment box based on the status
+  toggleCommentBox(reportId, status);
+
+  updateEvaluationStatus(reportId); // Update the status in the Report Evaluation section as well
+}
+
+// Function to toggle the visibility of the comment box based on the status
+function toggleCommentBox(reportId, status) {
+  const commentBox = document.getElementById(`comment-${reportId}`);
+
+  // Show the comment box if the status is "Flagged" or "Rejected", otherwise hide it
+  if (status === "Flagged" || status === "Rejected") {
+    commentBox.style.display = "block";
+  } else {
+    commentBox.style.display = "none";
+  }
+
+  // Display the saved comment (if available)
+  displaySavedComment(reportId);
+}
+
+// Function to save the comment entered in the textarea
+function saveComment(reportId) {
+  const comment = document.getElementById(`comment-text-${reportId}`).value.trim();
+  
+  if (comment) {
+    localStorage.setItem(`comment-${reportId}`, comment); // Save comment in localStorage
+    alert("Clarification saved!");
+
+    // Display the saved comment
+    displaySavedComment(reportId);
+  } else {
+    alert("Please enter a clarification comment.");
+  }
+}
+
+// Function to display the saved comment for the report
+function displaySavedComment(reportId) {
+  const savedComment = localStorage.getItem(`comment-${reportId}`);
+  const commentDisplay = document.getElementById(`saved-comment-${reportId}`);
+  const displayCommentText = document.getElementById(`display-comment-${reportId}`);
+
+  if (savedComment) {
+    commentDisplay.style.display = "block";
+    displayCommentText.textContent = savedComment;  // Display the saved comment
+  } else {
+    commentDisplay.style.display = "none";
+  }
+}
+
+
+    function updateEvaluationStatus(companyId) {
+      const status = localStorage.getItem(`status-${companyId}`) || "Pending";
+      document.getElementById(`evaluation-status-${companyId}`).textContent = status;
+    }
+
+    function showEvaluation(companyId) {
+      const ids = ["pepsi", "nestle", "sewedy"];
+      ids.forEach(id => {
+        document.getElementById(`evaluation-${id}`).style.display = (id === companyId) ? "block" : "none";
+      });
+      updateEvaluationStatus(companyId);  // Update the status in the evaluation section
+    }
+
+    function downloadReport(company) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      let content = "";
+
+      if (company === "PepsiCo") {
+        content += "Internship Report: PepsiCo\nStudent: Ahmed Mahmoud\nTitle: Marketing Automation at PepsiCo\nIntroduction: This report discusses the integration of automated marketing analytics tools at PepsiCo’s Cairo office.\nInternship Dates: June 1, 2024 – August 31, 2024\n";
+      } else if (company === "Nestlé") {
+        content += "Internship Report: Nestlé\nStudent: Mariam Samir\nTitle: Quality Control in Dairy Production\nIntroduction: The internship at Nestlé’s production facility focused on hygiene procedures and product quality testing in dairy lines.\nInternship Dates: July 1, 2024 – September 15, 2024\n";
+      } else if (company === "El Sewedy") {
+        content += "Internship Report: El Sewedy Electric\nStudent: Youssef El Sayed\nTitle: Smart Grid Systems at El Sewedy\nIntroduction: This report explains the student’s work on implementing smart metering systems and grid monitoring dashboards during the internship.\nInternship Dates: May 15, 2024 – August 1, 2024\n";
+      }
+
+      doc.text(content, 10, 10);
+      doc.save(`${company}_Internship_Report.pdf`);
+    }
+
+    window.onload = function () {
+      ["pepsi", "nestle", "sewedy"].forEach(id => {
+        const savedStatus = localStorage.getItem(`status-${id}`) || "Pending";
+        document.getElementById(`status-${id}`).textContent = savedStatus;
+        document.getElementById(`evaluation-status-${id}`).textContent = savedStatus;  // Ensure that the evaluation section reflects the status
+      });
+    };
+
+    function filterReportsByStatus(selectedStatus) {
+      const output = document.getElementById("filtered-reports");
+      output.innerHTML = "";
+
+      const reports = [
+        { id: "pepsi", company: "PepsiCo", student: "Ahmed Mahmoud", title: "Marketing Automation at PepsiCo", intro: "This report discusses the integration of automated marketing analytics tools at PepsiCo’s Cairo office.", dates: "June 1, 2024 – August 31, 2024" },
+        { id: "nestle", company: "Nestlé", student: "Mariam Samir", title: "Quality Control in Dairy Production", intro: "The internship at Nestlé’s production facility focused on hygiene procedures and product quality testing in dairy lines.", dates: "July 1, 2024 – September 15, 2024" },
+        { id: "sewedy", company: "El Sewedy Electric", student: "Youssef El Sayed", title: "Smart Grid Systems at El Sewedy", intro: "This report explains the student’s work on implementing smart metering systems and grid monitoring dashboards during the internship.", dates: "May 15, 2024 – August 1, 2024" }
+      ];
+
+      reports.forEach(report => {
+        const savedStatus = localStorage.getItem(`status-${report.id}`) || "Pending";
+        if (savedStatus === selectedStatus) {
+          output.innerHTML += `
+            <div style="background: #fff; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); text-align: left;">
+              <h3>${report.company}</h3>
+              <p><strong>Student:</strong> ${report.student}</p>
+              <p><strong>Title:</strong> ${report.title}</p>
+              <p><strong>Introduction:</strong> ${report.intro}</p>
+              <p><strong>Internship Dates:</strong> ${report.dates}</p>
+              <p><strong>Status:</strong> ${savedStatus}</p>
+            </div>`;
+        }
+      });
+
+      if (output.innerHTML === "") {
+        output.innerHTML = "<p style='margin-top: 10px;'>No reports found with this status.</p>";
+      }
+    }
+    function displayStatistics() {
+  // Hardcoded statistics
+  const acceptedCount = 10;      // Hardcoded number of accepted reports
+  const rejectedCount = 2;       // Hardcoded number of rejected reports
+  const flaggedCount = 3;        // Hardcoded number of flagged reports
+  const avgReviewTime = 5;       // Hardcoded average review time (in days)
+  const mostUsedCourses = "Course A, Course B";  // Hardcoded list of most frequently used courses
+  const topRatedCompanies = "PepsiCo, El Sewedy"; // Hardcoded top-rated companies
+  const topCompaniesCount = "El Sewedy, Nestle'"; // Hardcoded top companies by internship count
+
+  // Update the HTML with these values
+  document.getElementById("accepted-count").textContent = acceptedCount;
+  document.getElementById("rejected-count").textContent = rejectedCount;
+  document.getElementById("flagged-count").textContent = flaggedCount;
+  document.getElementById("avg-review-time").textContent = avgReviewTime;
+  document.getElementById("most-used-courses").textContent = mostUsedCourses;
+  document.getElementById("top-rated-companies").textContent = topRatedCompanies;
+  document.getElementById("top-companies-count").textContent = topCompaniesCount;
+}
+
+// Call this function when the page loads to display the hardcoded statistics
+window.onload = displayStatistics;
+function generateReport() {
+  const { jsPDF } = window.jspdf; // jsPDF library
+  const doc = new jsPDF();
+
+  // Get the data from the HTML
+  const acceptedCount = document.getElementById("accepted-count").textContent;
+  const rejectedCount = document.getElementById("rejected-count").textContent;
+  const flaggedCount = document.getElementById("flagged-count").textContent;
+  const avgReviewTime = document.getElementById("avg-review-time").textContent;
+  const mostUsedCourses = document.getElementById("most-used-courses").textContent;
+  const topRatedCompanies = document.getElementById("top-rated-companies").textContent;
+  const topCompaniesCount = document.getElementById("top-companies-count").textContent;
+
+  // Add data to the PDF
+  doc.text("Real-Time Statistics Report", 10, 10);
+  doc.text(`Accepted Reports: ${acceptedCount}`, 10, 20);
+  doc.text(`Rejected Reports: ${rejectedCount}`, 10, 30);
+  doc.text(`Flagged Reports: ${flaggedCount}`, 10, 40);
+  doc.text(`Average Review Time (Days): ${avgReviewTime}`, 10, 50);
+  doc.text(`Most Frequently Used Courses: ${mostUsedCourses}`, 10, 60);
+  doc.text(`Top Rated Companies: ${topRatedCompanies}`, 10, 70);
+  doc.text(`Top Companies by Internship Count: ${topCompaniesCount}`, 10, 80);
+
+  // Save the PDF
+  doc.save('Real-Time_Statistics_Report.pdf');
+}
+
+// Call this function when the page loads to display the hardcoded statistics
+window.onload = displayStatistics;
+// Logout function
+function logout() {
+  // Redirect to the login page
+  window.location.href = "login.html";  // Replace 'login.html' with the path to your login page
+}
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Registration - GUC Internship System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="data.js" defer></script>
+    </head>
+<body id="company-register-page">
+    <header class="dashboard-header">
+        <h1>GUC Internship System</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html" id="backToLoginLinkRegisterPage">Back to Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="dashboard-main">
+        <h2 id="page-title">Complete Company Profile</h2>
+        <div class="container">
+            <p id="register-info-message" style="margin-bottom:15px; font-style:italic;">Please complete your company profile to proceed to the dashboard.</p>
+            <form id="company-register-form">
+                <div class="form-group">
+                    <label for="companyNameRegister">Company Name:</label>
+                    <input type="text" id="companyNameRegister" name="companyNameRegister" required>
+                </div>
+                <div class="form-group">
+                    <label for="industryRegister">Industry:</label>
+                    <input type="text" id="industryRegister" name="industryRegister" required>
+                </div>
+                <div class="form-group">
+                    <label for="companySizeRegister">Company Size:</label>
+                    <select id="companySizeRegister" name="companySizeRegister" required>
+                        <option value="">Select Size</option>
+                        <option value="small">Small (1-50 employees)</option>
+                        <option value="medium">Medium (51-100 employees)</option>
+                        <option value="large">Large (101-500 employees)</option>
+                        <option value="corporate">Corporate (500+ employees)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="companyEmailRegister">Official Company Email:</label>
+                    <input type="email" id="companyEmailRegister" name="companyEmailRegister" required readonly> 
+                </div>
+                 <div class="form-group">
+                    <label for="profileDescriptionRegister">Company Profile/Description:</label>
+                    <textarea id="profileDescriptionRegister" name="profileDescriptionRegister" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="logoRegister">Company Logo (URL):</label>
+                    <input type="url" id="logoRegister" name="logoRegister" placeholder="https://example.com/logo.png">
+                </div>
+                <div class="form-group">
+                    <label for="companyDocumentsRegister">Proof Documents (e.g., tax documents):</label>
+                    <input type="file" id="companyDocumentsRegister" name="companyDocumentsRegister" multiple>
+                    <small>Simulated upload. Files won't actually be stored in this prototype.</small>
+                </div>
+                <button type="submit" class="action-btn">Complete Registration & Proceed</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer">
+        <p>&copy; 2025 GUC Internship System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const companyRegisterForm = document.getElementById('company-register-form');
+            const companyNameInput = document.getElementById('companyNameRegister');
+            const companyEmailInput = document.getElementById('companyEmailRegister');
+            const infoMessage = document.getElementById('register-info-message');
+            // const backToLoginLink = document.getElementById('backToLoginLinkRegisterPage');
+
+
+            const currentUserData = localStorage.getItem('currentUser');
+            let currentUser = null;
+
+            if (currentUserData) {
+                currentUser = JSON.parse(currentUserData);
+                if (currentUser.role === 'company') {
+                    if (companyEmailInput) companyEmailInput.value = currentUser.email;
+                    if (companyNameInput) companyNameInput.value = currentUser.name || ''; 
+                    
+                    // Check if this company profile *still* needs completion from data.js
+                    // This is an extra check in case they navigated here directly after already completing.
+                    const companies = typeof getCompaniesFromStorage === 'function' ? getCompaniesFromStorage() : [];
+                    const companyProfile = companies.find(c => c.id === currentUser.id || c.email === currentUser.email);
+                    if (companyProfile && companyProfile.profileNeedsCompletion === false) {
+                        infoMessage.textContent = "Your profile is already complete. Redirecting to dashboard...";
+                        infoMessage.style.color = "green";
+                        // if(backToLoginLink) backToLoginLink.style.display = 'inline-block'; // Show back to login
+                        setTimeout(() => { window.location.href = 'company-dashboard.html'; }, 2000);
+                    } else {
+                         // if(backToLoginLink) backToLoginLink.style.display = 'none'; // Hide if forced here
+                    }
+                } else {
+                    // Not a company user, or user directly navigated here without login context.
+                    // For this specific flow, redirect if not a company that needs completion.
+                    // alert("Access denied. Please log in first.");
+                    // window.location.href = 'index.html';
+                    infoMessage.textContent = "Please log in as a company representative first.";
+                    companyRegisterForm.style.display = 'none';
+                }
+            } else {
+                infoMessage.textContent = "You need to be logged in to complete company registration.";
+                if(companyRegisterForm) companyRegisterForm.style.display = 'none';
+                // if(backToLoginLink) backToLoginLink.style.display = 'inline-block';
+                console.warn("No current user data found on registration page.");
+            }
+
+            if (companyRegisterForm) {
+                companyRegisterForm.addEventListener('submit', (event) => {
+                    event.preventDefault();
+
+                    if (!currentUser || currentUser.role !== 'company') {
+                        alert("Error: Not logged in as a company representative or session expired.");
+                        return;
+                    }
+
+                    if (typeof getCompaniesFromStorage === 'undefined' || typeof saveCompaniesToStorage === 'undefined') {
+                        alert('System error: Company data service not available.');
+                        return;
+                    }
+
+                    const companies = getCompaniesFromStorage();
+                    const companyIndex = companies.findIndex(c => c.id === currentUser.id || c.email === currentUser.email);
+
+                    if (companyIndex === -1) {
+                        // This case indicates a new company that was not in dummyUsers/dummyCompanies before.
+                        // For this specific flow, we assumed an entry for "companyrep@company.com" already existed
+                        // in dummyUsers and dummyCompanies (with profileNeedsCompletion:true).
+                        // If you want general new company registration from the link on login page, this part would create a new company.
+                        // For now, sticking to the "complete existing redirected company" flow.
+                        alert("Error: Company profile to update not found. Please contact support or try logging in again.");
+                        return;
+                    }
+
+                    // Update existing company profile
+                    companies[companyIndex].name = companyNameInput.value;
+                    companies[companyIndex].industry = document.getElementById('industryRegister').value;
+                    companies[companyIndex].size = document.getElementById('companySizeRegister').value;
+                    companies[companyIndex].profileDescription = document.getElementById('profileDescriptionRegister').value;
+                    companies[companyIndex].logo = document.getElementById('logoRegister').value;
+                    // Note: companyEmail is readonly, taken from currentUser.email
+                    // companies[companyIndex].documents = ...; // File handling is complex for front-end only
+                    companies[companyIndex].status = "approved"; // Or "pending_scad_approval"
+                    companies[companyIndex].profileNeedsCompletion = false; // Mark profile as complete
+
+                    saveCompaniesToStorage(companies);
+
+                    // Update currentUser's name in localStorage if it changed and was edited from company form
+                    if(currentUser.name !== companies[companyIndex].name) {
+                        currentUser.name = companies[companyIndex].name;
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    }
+
+                    alert('Company profile completed successfully! Redirecting to your dashboard.');
+                    setTimeout(() => {
+                        window.location.href = 'company-dashboard.html';
+                    }, 1000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
