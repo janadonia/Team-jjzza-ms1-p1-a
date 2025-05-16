@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SCAD Office Dashboard - GUC Internship System</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="data.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body id="scad-dashboard-page">
+  <header class="header">
+    <h1 class="header__title">GUC Internship System - SCAD Office</h1>
+    <nav class="nav">
+      <span>Welcome, <strong id="user-name">Admin</strong>!</span>
+      <ul class="nav__links">
+        <li><a href="#company-management">Company Approvals</a></li>
+        <li><a href="#view-all-companies">All Companies</a></li>
+        <li><a href="#view-all-students">All Students</a></li>
+        <li><a href="#view-all-internships">All Internships</a></li>
+        <li><a href="#add-company">Add Company</a></li>
+        <li><a href="#post-internship">Post Internship</a></li>
+        <li><a href="#student-profile">Student Profile</a></li>
+        <li><a href="#student-uploads">Student Uploads</a></li>
+        <li><a href="#internship-history">Internship History</a></li>
+      </ul>
+      <button id="logout-btn" class="btn btn--danger">Logout</button>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section id="company-management" class="section">
+      <h2>Pending Company Applications</h2>
+      <div class="filters">
+        <input
+          type="text"
+          id="search-pending-company"
+          placeholder="Search by Name..."
+          class="input"
+        />
+        <button id="filter-pending-company-btn" class="btn btn--primary">
+          Search
+        </button>
+      </div>
+      <div id="company-applications-container" class="list-container">
+        <p>Loading company applications...</p>
+      </div>
+    </section>
+
+    <section id="view-all-companies" class="section">
+      <h2>All Registered Companies</h2>
+      <div class="filters">
+        <input
+          type="text"
+          id="search-all-company-name"
+          placeholder="Search by Name..."
+          class="input"
+        />
+        <select
+          id="filter-all-company-status"
+          class="input"
+          aria-label="Filter companies by status"
+        >
+          <option value="">All Statuses</option>
+          <option value="approved">Approved</option>
+          <option value="pending">Pending</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <button id="filter-all-companies-btn" class="btn btn--primary">
+          Filter/Search
+        </button>
+      </div>
+      <div id="all-companies-container" class="list-container">
+        <p>Loading all companies...</p>
+      </div>
+    </section>
+
+    <section id="view-all-students" class="section">
+      <h2>All Students</h2>
+      <div class="filters">
+        <input
+          type="text"
+          id="search-student-name"
+          placeholder="Search by Name..."
+          class="input"
+        />
+        <input
+          type="text"
+          id="search-student-major"
+          placeholder="Search by Major..."
+          class="input"
+        />
+        <button id="filter-students-btn" class="btn btn--primary">Filter/Search</button>
+      </div>
+      <div id="all-students-container" class="list-container">
+        <p>Loading all students...</p>
+      </div>
+    </section>
+
+    <section id="view-all-internships" class="section">
+      <h2>All Internship Posts</h2>
+      <div class="filters">
+        <input
+          type="text"
+          id="search-internship-title-scad"
+          placeholder="Search by Title..."
+          class="input"
+        />
+        <input
+          type="text"
+          id="search-internship-company-scad"
+          placeholder="Search by Company..."
+          class="input"
+        />
+        <button id="filter-internships-scad-btn" class="btn btn--primary">
+          Filter/Search
+        </button>
+      </div>
+      <div id="all-internships-container-scad" class="list-container">
+        <p>Loading all internships...</p>
+      </div>
+    </section>
+
+    <section id="add-company" class="section section--form">
+      <h2>Add New Company</h2>
+      <form id="add-company-form" class="form">
+        <input
+          type="text"
+          placeholder="Company Name"
+          required
+          class="input"
+          name="companyName"
+        />
+        <input
+          type="text"
+          placeholder="Industry"
+          required
+          class="input"
+          name="industry"
+        />
+        <input
+          type="email"
+          placeholder="Contact Email"
+          required
+          class="input"
+          name="contactEmail"
+        />
+        <button type="submit" class="btn btn--primary btn--block">Add Company</button>
+      </form>
+    </section>
+
+    <section id="edit-company" class="section">
+      <h2>Edit Company Details</h2>
+      <p>Select a company from the list to edit details.</p>
+      <div id="edit-company-container" class="list-container"></div>
+    </section>
+
+    <section id="post-internship" class="section section--form">
+      <h2>Post New Internship</h2>
+      <form id="post-internship-form" class="form">
+        <input
+          type="text"
+          placeholder="Internship Title"
+          required
+          class="input"
+          name="internshipTitle"
+        />
+        <input
+          type="text"
+          placeholder="Company Name"
+          required
+          class="input"
+          name="companyName"
+        />
+        <textarea
+          placeholder="Internship Description"
+          required
+          class="input input--textarea"
+          name="description"
+          rows="5"
+        ></textarea>
+        <button type="submit" class="btn btn--primary btn--block">
+          Post Internship
+        </button>
+      </form>
+    </section>
+
+    <section id="student-profile" class="section section--form">
+      <h2>Edit Student Information</h2>
+      <form id="edit-student-form" class="form">
+        <input
+          type="text"
+          placeholder="Student Name"
+          required
+          class="input"
+          name="studentName"
+        />
+        <input
+          type="text"
+          placeholder="Major"
+          class="input"
+          name="studentMajor"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          class="input"
+          name="studentEmail"
+        />
+        <button type="submit" class="btn btn--primary btn--block">Update Info</button>
+      </form>
+    </section>
+
+    <section id="student-uploads" class="section section--form">
+      <h2>Upload Student Documents</h2>
+      <form id="student-uploads-form" class="form">
+        <label for="upload-cv">Upload CV:</label>
+        <input id="upload-cv" type="file" class="input" />
+        <label for="upload-final-report">Upload Final Report:</label>
+        <input id="upload-final-report" type="file" class="input" />
+        <label for="upload-evaluation-form">Upload Evaluation Form:</label>
+        <input id="upload-evaluation-form" type="file" />
+        <label for="upload-company-contract">Upload Company Contract:</label>
+        <input id="upload-company-contract" type="file" />
+        <button type="submit" class="btn btn--primary btn--block">Upload</button>
+      </form>
+    </section>
+
+    <section id="internship-history" class="section">
+      <h2>Internship History</h2>
+      <p>View students' previous internships and evaluations.</p>
+      <div id="internship-history-container" class="list-container"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 GUC Internship System. All rights reserved.</p>
+  </footer>
+</body>
+</html>
