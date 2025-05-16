@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAD Office Dashboard  - GUC Internship System</title>
+    <link rel="stylesheet" href="style.css">
+   <!--  <script src="data.js" defer></script>
+    <script src="script.js" defer></script>-->
+<!-- correct attribute (`src`) and point to your file -->
+<script src="scad-dashboard.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body id="scad-dashboard-page">
+    <header class="dashboard-header">
+       <!--  <h1>GUC Internship System - SCAD Office</h1>-->
+        <nav class="dashboard-nav">
+            <button id="start-video-call-btn" class="action-btn">Start Video Call</button>
+  <div class="nav-left">
+    Welcome, <span id="user-name" style="font-weight:bold;">Admin</span>! |
+    </div>
+    <div class="nav-center">
+    <a href="#pending-company-applications" style="color: white;">Company Approvals</a> |
+    <a href="#view-all-companies" style="color: white;">Internships</a> |
+    <a href="#view-all-students" style="color: white;">All Students</a> |
+    <a href="#all-companies-tab" style="color: white;">All Companies</a> |
+
+  </div>
+
+  
+  <div class="nav-right">
+    <button id="logout-btn" class="action-btn logout-btn">Logout</button>
+  </div>
+</nav>
+
+    </header>
+
+    <main class="dashboard-main">
+        <h2 id="page-title">SCAD Office Dashboard</h2>
+        <section id="pending-company-applications" class="dashboard-section">
+    <h3>Pending Company Applications</h3>
+    <div id="company-applications-list">
+        <!-- JavaScript will populate this list -->
+        <p>Loading pending applications...</p>
+    </div>
+</section>
+
+        
+<section id="current-internship-cycle" class="dashboard-section">
+  <h3>Current Internship Cycle</h3>
+
+  <!-- New date inputs + button -->
+  <div class="cycle-date-picker mb-4 p-2 bg-gray-100 rounded-md">
+    <label for="current-start-date" class="mr-2">
+      Start Date:
+      <input type="date" id="current-start-date" class="p-1 border rounded">
+    </label>
+    <label for="current-end-date" class="mr-2">
+      End Date:
+      <input type="date" id="current-end-date" class="p-1 border rounded">
+    </label>
+    <button type="submit" id="post-internship-cycle-btn" class="action-btn">Post</button>
+  </div>
+
+  <div id="current-internships-container">
+   <!--  <p>Loading current internships...</p>-->
+  </div>
+</section>
+
+         <section id="company-management" class="dashboard-section">
+
+            <h3>Pending Company Applications</h3>
+            <div class="filters mb-2 p-2 bg-gray-100 rounded-md">
+                 <input type="text" id="search-pending-company" placeholder="Search by Name..." class="p-2 border rounded mr-2">
+                 <button id="filter-pending-company-btn" class="action-btn">Search</button>
+            </div>
+            <div id="company-applications-container">
+                <p>Loading company applications...</p>
+                </div>
+        </section>
+
+        <section id="view-all-companies" class="dashboard-section">
+  <h3>Internships</h3>
+  <div class="filters mb-2 p-2 bg-gray-100 rounded-md">
+    <button id="reports-btn" style="margin-left: 10px;">Reports</button>
+
+    <input
+      type="text"
+      id="search-all-company-name"
+      placeholder="Search by Company..."
+      class="p-2 border rounded mr-2"
+    >
+    <input
+      type="text"
+      id="search-internship-title"
+      placeholder="Search by Title..."
+      class="p-2 border rounded mr-2"
+    >
+    <select
+      id="filter-industry"
+      class="p-2 border rounded mr-2"
+    >
+      <option value="">All Industries</option>
+      <option value="Engineering">Engineering</option>
+      <option value="Business">Business</option>
+      <option value="Architecture">Architecture</option>
+    </select>
+    <select
+      id="filter-duration"
+      class="p-2 border rounded mr-2"
+    >
+      <option value="">All Durations</option>
+      <option value="3 months">3 months</option>
+      <option value="2 months">2 months</option>
+      <option value="2 weeks">2 weeks</option>
+    </select>
+    <select
+      id="filter-paid"
+      class="p-2 border rounded mr-2"
+    >
+      <option value="all">All</option>
+      <option value="paid">Paid</option>
+      <option value="unpaid">Unpaid</option>
+    </select>
+    <button
+      id="filter-all-companies-btn"
+      class="action-btn"
+    >Filter/Search</button>
+  </div>
+  <div id="all-companies-container">
+    <p>Loading internships...</p>
+  </div>
+</section>
+
+
+
+      <section id="view-all-students" class="dashboard-section">
+  <h3>All Students</h3>
+  <div class="filters mb-2 p-2 bg-gray-100 rounded-md">
+    <input type="text" id="search-student-name" placeholder="Search by Name..." class="p-2 border rounded mr-2">
+    <input type="text" id="search-student-major" placeholder="Search by Major..." class="p-2 border rounded mr-2">
+    <!-- New status filter dropdown -->
+    <select id="filter-student-status" class="p-2 border rounded mr-2">
+      <option value="all">All Statuses</option>
+      <option value="Current Intern">Current Intern</option>
+      <option value="Past Intern">Past Intern</option>
+    </select>
+    <button id="filter-students-btn" class="action-btn">Filter/Search</button>
+  </div>
+  <div id="all-students-container">
+    <p>Loading all students...</p>
+  </div>
+</section>
+
+<section id="all-companies-tab" class="dashboard-section">
+  <h3>All Companies</h3>
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+    
+    <div 
+    style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; width: 300px; background: #f9f9f9;">
+      <h4 style="margin-bottom: 8px; font-size: 1.2em;">Microsoft</h4>
+      <p><strong>Industry:</strong> Technology</p>
+      <p><strong>Details:</strong> A multinational tech company known for software, cloud services, and hardware solutions.</p>
+    </div>
+
+    <div 
+     style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; width: 300px; background: #f9f9f9;">
+      <h4 style="margin-bottom: 8px; font-size: 1.2em;">Amazon</h4>
+      <p><strong>Industry:</strong> E-commerce & Cloud</p>
+      <p><strong>Details:</strong> A global leader in online retail, cloud computing (AWS), and logistics innovation.</p>
+    </div>
+
+    <div 
+    style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; width: 300px; background: #f9f9f9;">
+      <h4 style="margin-bottom: 8px; font-size: 1.2em;">PwC</h4>
+      <p><strong>Industry:</strong> Consulting</p>
+      <p><strong>Details:</strong> One of the Big Four firms providing auditing, tax, and business advisory services worldwide.</p>
+    </div>
+
+    <div 
+    style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; width: 300px; background: #f9f9f9;">
+      <h4 style="margin-bottom: 8px; font-size: 1.2em;">Hany Saad Innovations</h4>
+      <p><strong>Industry:</strong> Architecture</p>
+      <p><strong>Details:</strong> A leading design and architecture firm known for innovative luxury residential and commercial projects.</p>
+    </div>
+
+  </div>
+</section>
+
+
+
+<section id="statistics-tab" class="dashboard-section">
+   <h3>
+    Internship Statistics
+    <button id="generate-report-btn" style="margin-left: 20px;" class="action-btn">
+      Generate Report
+    </button>
+  </h3>
+
+  <div style="margin-bottom: 20px;">
+    <h4>Reports per Cycle</h4>
+    <ul>
+      <li>Cycle 1: Accepted – 15, Rejected – 3, Flagged – 2</li>
+      <li>Cycle 2: Accepted – 18, Rejected – 1, Flagged – 0</li>
+      <li>Cycle 3: Accepted – 10, Rejected – 4, Flagged – 1</li>
+    </ul>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <h4>Average Review Time</h4>
+    <p>3.5 days</p>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <h4>Most Frequently Used Courses in Internships</h4>
+    <ol>
+      <li>Introduction to Marketing</li>
+      <li>Software Engineering</li>
+      <li>Business Communication</li>
+      <li>UX/UI Design Fundamentals</li>
+    </ol>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <h4>Top Rated Companies (based on student evaluations)</h4>
+    <ol>
+      <li>Microsoft – 4.9/5</li>
+      <li>Amazon – 4.7/5</li>
+      <li>Hany Saad Innovations – 4.5/5</li>
+    </ol>
+  </div>
+
+  <div>
+    <h4>Top Companies by Internship Count</h4>
+    <ol>
+      <li>Amazon – 12 interns</li>
+      <li>Microsoft – 10 interns</li>
+      <li>PwC – 8 interns</li>
+    </ol>
+  </div>
+</section>
+
+<!-- Add this new tab button next to the "All Students" tab -->
+<!-- <button class="tablinks" onclick="openTab(event, 'statistics-tab')">Statistics</button>-->
+
+
+<section id="workshop-management" class="dashboard-section">
+  <h3>Online Workshops</h3>
+  
+  <!-- Workshop Form -->
+  <form id="workshop-form" class="p-4 mb-4 bg-gray-100 rounded-md">
+    <input type="hidden" id="edit-index">
+
+    <label>Workshop Name:</label><br>
+    <input type="text" id="workshop-name" class="p-2 border rounded w-full mb-2"><br>
+
+    <label>Start Date & Time:</label><br>
+    <input type="datetime-local" id="start-datetime" class="p-2 border rounded w-full mb-2"><br>
+
+    <label>End Date & Time:</label><br>
+    <input type="datetime-local" id="end-datetime" class="p-2 border rounded w-full mb-2"><br>
+
+    <label>Short Description:</label><br>
+    <textarea id="workshop-description" class="p-2 border rounded w-full mb-2"></textarea><br>
+
+    <label>Speaker Bio:</label><br>
+    <textarea id="speaker-bio" class="p-2 border rounded w-full mb-2"></textarea><br>
+
+    <label>Agenda:</label><br>
+    <textarea id="workshop-agenda" class="p-2 border rounded w-full mb-2"></textarea><br>
+
+    <button type="submit" class="action-btn" id="submit-workshop-btn">Add Workshop</button>
+  </form>
+
+  <!-- Display Workshops -->
+  <div id="workshop-list">
+    <p>No workshops added yet.</p>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("workshop-form");
+  const list = document.getElementById("workshop-list");
+  const workshops = [];
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const index = document.getElementById("edit-index").value;
+    const workshop = {
+      name: document.getElementById("workshop-name").value,
+      start: document.getElementById("start-datetime").value,
+      end: document.getElementById("end-datetime").value,
+      description: document.getElementById("workshop-description").value,
+      speaker: document.getElementById("speaker-bio").value,
+      agenda: document.getElementById("workshop-agenda").value
+    };
+
+    if (index === "") {
+      workshops.push(workshop);
+    } else {
+      workshops[index] = workshop;
+      document.getElementById("submit-workshop-btn").textContent = "Add Workshop";
+    }
+
+    form.reset();
+    document.getElementById("edit-index").value = "";
+    renderWorkshops();
+  });
+
+  function renderWorkshops() {
+    list.innerHTML = "";
+    if (workshops.length === 0) {
+      list.innerHTML = "<p>No workshops added yet.</p>";
+      return;
+    }
+
+    workshops.forEach((w, i) => {
+      const box = document.createElement("div");
+      box.className = "p-4 border rounded mb-3 bg-white shadow";
+
+      box.innerHTML = `
+        <h4 class="font-bold text-lg">${w.name}</h4>
+        <p><strong>Start:</strong> ${w.start}</p>
+        <p><strong>End:</strong> ${w.end}</p>
+        <p><strong>Description:</strong> ${w.description}</p>
+        <p><strong>Speaker Bio:</strong> ${w.speaker}</p>
+        <p><strong>Agenda:</strong> ${w.agenda}</p>
+        <button onclick="editWorkshop(${i})" class="action-btn mr-2">Edit</button>
+        <button onclick="deleteWorkshop(${i})" class="action-btn logout-btn">Delete</button>
+      `;
+
+      list.appendChild(box);
+    });
+  }
+
+  window.editWorkshop = function(index) {
+    const w = workshops[index];
+    document.getElementById("edit-index").value = index;
+    document.getElementById("workshop-name").value = w.name;
+    document.getElementById("start-datetime").value = w.start;
+    document.getElementById("end-datetime").value = w.end;
+    document.getElementById("workshop-description").value = w.description;
+    document.getElementById("speaker-bio").value = w.speaker;
+    document.getElementById("workshop-agenda").value = w.agenda;
+    document.getElementById("submit-workshop-btn").textContent = "Update Workshop";
+  };
+
+  window.deleteWorkshop = function(index) {
+    workshops.splice(index, 1);
+    renderWorkshops();
+  };
+</script>
+        </main>
+
+    <footer class="dashboard-footer">
+        <p>&copy; 2025 GUC Internship System. All rights reserved.</p>
+    </footer>
+    <div id="reports-popup" style="
+  display: none;
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  padding: 20px;
+  z-index: 1000;
+  max-width: 500px;
+">
+  <h3>Reports</h3>
+  <ul>
+    <li><a href="report1.pdf" target="_blank">Internship Report - June 2024</a></li>
+    <li><a href="report2.pdf" target="_blank">Student Participation Report</a></li>
+    <li><a href="report3.pdf" target="_blank">Company Feedback Summary</a></li>
+  </ul>
+  <button id="close-reports-popup" style="margin-top: 10px;">Close</button>
+</div>
+
+<!-- Optional: dim background -->
+<div id="popup-overlay" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+"></div>
