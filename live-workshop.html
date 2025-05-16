@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Workshop</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f6f8;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .video-placeholder {
+      background: #ccc;
+      height: 300px;
+      text-align: center;
+      line-height: 300px;
+      font-size: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+    .note-area {
+      margin-top: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+    .chat-box {
+      border: 1px solid #ddd;
+      height: 200px;
+      overflow-y: auto;
+      padding: 10px;
+      background: #fafafa;
+      margin-bottom: 10px;
+    }
+    .chat-message {
+      margin-bottom: 5px;
+    }
+    .you {
+      color: #2b6cb0;
+    }
+    .other {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Live Workshop Room</h2>
+
+    <div class="video-placeholder">[ Live Video Placeholder ]</div>
+
+    <div class="chat-section">
+      <h3>Live Chat</h3>
+      <div class="chat-box" id="chatBox"></div>
+      <input type="text" id="chatInput" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <div class="note-area">
+      <h3>Your Notes</h3>
+      <textarea id="notesArea" placeholder="Write your notes here..."></textarea>
+      <button onclick="saveNotes()">Save Notes</button>
+    </div>
+  </div>
+
+  <div class="feedback-section">
+  <h3>Rate the Workshop</h3>
+  <label for="rating">Rating (1–5):</label>
+  <input type="number" id="rating" min="1" max="5"><br><br>
+  <label for="feedback">Feedback:</label><br>
+  <textarea id="feedback" placeholder="Write your feedback here..." rows="4" cols="40"></textarea><br><br>
+  <button onclick="submitFeedback()">Submit Feedback & Receive Certificate</button>
+
+  <div id="certificate-message" style="margin-top: 20px; display: none;">
+    <p style="color: green;"><strong>Thank you! Your certificate is ready:</strong></p>
+    <a id="certificate-link" href="#" download="certificate.pdf">Download Certificate</a>
+  </div>
+</div>
+
+  <script>
+    const profile = JSON.parse(localStorage.getItem("studentProfile"));
+    const chatBox = document.getElementById("chatBox");
+
+    function loadMessages() {
+      const allMessages = JSON.parse(localStorage.getItem("workshopChat") || "[]");
+      chatBox.innerHTML = "";
+      allMessages.forEach(msg => {
+        const div = document.createElement("div");
+        div.className = "chat-message " + (msg.sender === profile.email ? "you" : "other");
+        div.textContent = msg.sender + ": " + msg.text;
+        chatBox.appendChild(div);
+      });
+
+      // Scroll to bottom and notify
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("chatInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const messages = JSON.parse(localStorage.getItem("workshopChat") || "[]");
+      messages.push({ sender: profile.email, text });
+      localStorage.setItem("workshopChat", JSON.stringify(messages));
+      input.value = "";
+
+      loadMessages();
+
+      // Trigger browser notification
+      if (Notification.permission === "granted") {
+        new Notification("New message", {
+          body: profile.email + ": " + text
+        });
+      }
+    }
+
+    function saveNotes() {
+      const notes = document.getElementById("notesArea").value.trim();
+      if (notes) {
+        localStorage.setItem("notes_" + profile.email, notes);
+        alert("Your notes have been saved.");
+      }
+    }
+
+    
+
+    // Ask for notification permission
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
+    // Auto-load messages every 2 seconds (simulate live updates)
+    setInterval(loadMessages, 2000);
+    loadMessages();
+  </script>
+</body>
+</html>

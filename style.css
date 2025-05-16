@@ -1,0 +1,914 @@
+/* GUC_Internship_System/style.css */
+/* Basic Reset or Global Styles */
+body {
+    font-family: 'Inter', sans-serif, Arial, sans-serif;
+    margin: 0;
+    line-height: 1.6;
+    background-color: #f4f6f8; /* Professional: Light Gray - Cleaner background */
+    color: #343a40; /* Professional: Darker Gray - For primary text, enhanced readability */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1, h2, h3 {
+    color: #2c3e50; /* Professional: Dark Slate Blue/Charcoal - For titles */
+    margin-top: 0;
+}
+
+header.dashboard-header, footer.dashboard-footer {
+    background-color: #2c3e50; 
+    color: white;
+    padding: 1em 2%; 
+    width: 100%;
+    box-sizing: border-box;
+}
+header.dashboard-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex; 
+    align-items: center; 
+}
+
+header.dashboard-header h1 {
+    margin: 0; 
+    white-space: nowrap;
+    flex-shrink: 0; 
+}
+
+footer.dashboard-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    text-align: center; 
+}
+
+/* Navigation Bar Styling */
+header.dashboard-header nav {
+    display: flex;
+    /* justify-content: space-between; Is implicitly handled by auto margins now */
+    align-items: center;
+    flex-grow: 1; 
+    margin-left: 20px; 
+}
+
+header.dashboard-header nav .nav-left { /* Contains "Welcome..." */
+    white-space: nowrap;
+    margin-right: auto; /* Pushes .nav-center and .nav-right away to the right */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+header.dashboard-header nav .nav-center { /* Contains the links */
+    text-align: center; 
+    /* flex-grow: 1; Is not strictly needed if left and right use auto margins to push it */
+    /* However, if links are few, it might not expand enough to truly center visually.
+       Keeping it or adjusting might be needed based on link count.
+       For now, relying on auto margins of siblings and its own text-align.
+    */
+}
+
+header.dashboard-header nav .nav-center a.nav-link {
+    color: white; 
+    text-decoration: none;
+    margin: 0 12px; 
+    font-weight: 500; 
+}
+
+header.dashboard-header nav .nav-center a.nav-link:hover,
+header.dashboard-header nav .nav-center a.nav-link:focus {
+    text-decoration: underline;
+    opacity: 0.85; 
+}
+
+header.dashboard-header nav .nav-right { /* Contains Logout button */
+    white-space: nowrap; /* If it were text */
+    margin-left: auto; /* Pushes itself to the right, away from .nav-center */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+/* --- END Navigation Bar Styling --- */
+
+/* ... (rest of CSS as previously provided) ... */
+
+/* Old nav ul/li styles - Commented out */
+/*
+nav ul { ... }
+nav ul li { ... }
+nav ul li a { ... }
+nav ul li a:hover { ... }
+*/
+
+main.dashboard-main {
+    flex-grow: 1;
+    padding: 20px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 80px auto 60px auto;
+    background-color: #ffffff; 
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.075); 
+    overflow-y: auto;
+}
+/* Add to your style.css */
+
+
+/* For items in the "My Past Evaluations" list */
+.evaluation-item p.description {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.evaluation-item .edit-eval-btn { /* Custom style for edit button if needed */
+    padding: 3px 6px;
+    font-size: 12px;
+}
+
+/* Radio button labels more space */
+#company-evaluation-form .form-group div label {
+    margin-left: 5px;
+    display: inline; /* Make label inline with radio */
+}
+#company-evaluation-form .form-group div {
+    margin-bottom: 5px; /* Space between radio options */
+}
+.container { 
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.list-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f8f9fa; 
+    border: 1px solid #dee2e6; 
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.list-item > div:first-child {
+    flex-grow: 1;
+}
+.list-item .action-btn, .list-item select {
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #495057; 
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="url"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #ced4da; 
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #495057; 
+    background-color: #fff; 
+}
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="url"]:focus,
+.form-group input[type="number"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #80bdff; 
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.action-btn {
+    background-color: #007bff; 
+    color: white; 
+    padding: 8px 15px; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+    transition: background-color 0.15s ease-in-out; 
+}
+.action-btn:hover {
+    background-color: #0056b3; 
+}
+
+.action-btn.cancel-btn, 
+button#cancel-edit-profile-btn, 
+button#reset-filters-btn, 
+button#clear-internship-form-btn { 
+    background-color: #6c757d; 
+    color: white;
+}
+.action-btn.cancel-btn:hover,
+button#cancel-edit-profile-btn:hover,
+button#reset-filters-btn:hover,
+button#clear-internship-form-btn:hover {
+    background-color: #5a6268; 
+}
+
+.action-btn.reject-btn {
+    background-color: #dc3545; 
+    color: white;
+}
+.action-btn.reject-btn:hover {
+    background-color: #c82333; 
+}
+
+.action-btn.approve-btn { 
+    background-color: #28a745; 
+    color: white;
+}
+.action-btn.approve-btn:hover {
+    background-color: #218838; 
+}
+
+
+.error-message {
+    color: #dc3545; 
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+.dashboard-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #ffffff; 
+    border: 1px solid #e9ecef; 
+    border-radius: 5px;
+}
+.dashboard-section h3 {
+    border-bottom: 2px solid #007bff; 
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: #2c3e50; 
+}
+
+.internship-card {
+    border: 1px solid #dee2e6; 
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    background-color: #fff;
+    display: block;
+}
+.internship-card h3 {
+    margin-top: 0;
+    color: #2c3e50; 
+}
+.internship-card .description {
+    font-size: 0.9em;
+    color: #495057; 
+}
+.internship-card .action-btn {
+    margin-top: 10px;
+    margin-right: 5px;
+}
+/* Add/Ensure these in your style.css */
+.text-green-700 { color: #047857; } /* Darker Green for Accepted */
+.text-red-600 { color: #dc2626; }
+.text-blue-600 { color: #2563eb; }
+.text-gray-600 { color: #4b5563; }
+.text-teal-600 { color: #0d9488; } /* For Current Intern */
+.text-purple-600 { color: #7e22ce; } /* For Internship Complete */
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+/* Optional: Style for the filter area in "My Submitted Applications" */
+/* .filters { margin-bottom: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 0.25rem; } */
+/* Your HTML already has some filter styling so this might not be needed or may need adjustment */
+/* GUC_Internship_System/style.css */
+/* ... (all existing styles) ... */
+
+/* --- NEW: Notification Panel Styles --- */
+#notification-panel-toggle-btn {
+    position: fixed;
+    top: 80px; /* Adjust as needed, below header */
+    left: 15px;
+    z-index: 1005; /* Above main content, below modal if any */
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 50%; /* Make it round */
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+#notification-panel-toggle-btn #notification-unread-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: bold;
+    border: 1px solid white;
+    display: none; /* Hidden by default, shown by JS if count > 0 */
+}
+
+
+#notification-center-panel {
+    position: fixed;
+    top: 0;
+    left: -350px; /* Start off-screen */
+    width: 330px; /* Sidebar width */
+    height: 100%;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    z-index: 1010; /* Higher than header to overlay if needed, or adjust header's z-index */
+    transition: left 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+#notification-center-panel.open {
+    left: 0; /* Slide in */
+}
+
+#notification-panel-header {
+    padding: 15px;
+    background-color: #e9ecef;
+    border-bottom: 1px solid #ced4da;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#notification-panel-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+    color: #495057;
+}
+#notification-panel-header #mark-all-read-btn {
+    padding: 3px 6px;
+    font-size: 0.75rem;
+}
+
+
+#notifications-list-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.notification-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e9ecef;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.notification-item:last-child {
+    border-bottom: none;
+}
+.notification-item:hover {
+    background-color: #e9ecef;
+}
+.notification-item.unread {
+    background-color: #fff; /* Slightly different for unread, or use font-weight */
+    font-weight: bold;
+}
+.notification-item p {
+    margin: 0 0 5px 0;
+    line-height: 1.4;
+}
+.notification-item small.notification-date {
+    font-size: 0.75rem;
+    color: #6c757d;
+    display: block;
+}
+.notification-item a {
+    color: #007bff;
+    text-decoration: none;
+}
+.notification-item a:hover {
+    text-decoration: underline;
+}
+
+#close-notification-panel-btn {
+    font-size: 24px;
+    padding: 0 5px;
+    line-height: 1;
+}
+#notification-center-panel {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  padding: 16px;
+  display: none; /* hidden by default */
+  z-index: 1000;
+}
+
+.notification-item {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+#notification-unread-count {
+  font-weight: bold;
+  color: red;
+}
+#notification-center-panel.visible {
+  display: block;
+}
+.action-btn.reject-btn {
+  background-color: #dc3545;
+}
+.action-btn.reject-btn:hover {
+  background-color: #c82333;
+}
+.tabs { border: 1px solid #ddd; }
+.tabs-nav { display: flex; border-bottom: 1px solid #ddd; }
+.tab-btn {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 1rem;
+}
+.tab-btn.active {
+  border-bottom: 2px solid #007bff;
+  font-weight: bold;
+}
+.tab-content {
+  display: none;
+  padding: 1rem;
+}
+.tab-content.active {
+  display: block;
+}
+
+.company-card {
+    background-color: #f9f9f9;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+#applicant-status {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow consistency */
+    width: 100%; /* Ensures the section takes up the available width */
+    max-width: 1200px; /* Matches the width of other sections */
+    margin-left: auto;
+    margin-right: auto; /* Centers the section */
+    max-height: 600px; /* Set a max height for the section */
+    overflow-y: auto; /* Allows scrolling if content exceeds max-height */
+}
+
+.applicant-status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.applicant-status-item {
+    padding: 20px; /* Increased padding for a more spacious look */
+    border-bottom: 1px solid #ddd; /* Separation between applicants */
+    font-size: 1.1rem; /* Slightly larger text for better readability */
+}
+
+.applicant-status-item p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.status-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px; /* Space between applicant info and buttons */
+}
+
+.status-btn {
+    padding: 10px 20px; /* Slightly larger buttons for better visual balance */
+    font-size: 1rem; /* Larger font size for better readability */
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Default button color */
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.status-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.status-btn:active {
+    background-color: #004085; /* Darker blue when clicked */
+}
+
+.status-btn.selected {
+    background-color: #28a745 !important; /* Green when selected */
+    color: white;
+}
+
+.status-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Accessibility focus outline */
+}
+.status-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.status-btn:hover {
+    background-color: #0056b3;
+}
+
+.status-btn:active {
+    background-color: #004085;
+}
+
+.status-btn.selected {
+    background-color: #28a745 !important;
+    color: white;
+}
+
+.status-btn.rejected {
+    background-color: #dc3545 !important;
+    color: white;
+}
+
+.status-btn.current-intern {
+    background-color: #1e4e8c !important;
+    color: white;
+}
+
+.status-btn.internship-complete {
+    background-color: #0d9488 !important;
+    color: white;
+}
+#internship-students-status {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.student-status-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.student-status-item p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+.student-status-item select {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/* Internships Students Status Section */
+#internship-students-status {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added shadow for consistency */
+    width: 100%; /* Ensures the section takes up the available width */
+    max-width: 1200px; /* Matches the width of other sections */
+    margin-left: auto;
+    margin-right: auto; /* Centers the section */
+    max-height: 600px; /* Set a max height to prevent overflow */
+    overflow-y: auto; /* Allows scrolling if content exceeds max-height */
+}
+
+/* List of Students with Status */
+.student-status-item {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Styling the student's name text */
+.student-status-item p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+/* Style for dropdowns (selects) */
+.student-status-item select {
+    padding: 8px 12px; /* Increased padding for consistency */
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 180px; /* Same width for dropdowns for alignment */
+}
+
+/* Status Buttons */
+.status-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px; /* Space between applicant info and buttons */
+}
+
+.status-btn {
+    padding: 10px 20px; /* Slightly larger buttons for visual balance */
+    font-size: 1rem; /* Larger font size for readability */
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Default button color */
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.status-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.status-btn:active {
+    background-color: #004085; /* Darker blue when clicked */
+}
+
+.status-btn.selected {
+    background-color: #28a745 !important; /* Green when selected */
+    color: white;
+}
+
+.status-btn.rejected {
+    background-color: #dc3545 !important; /* Red for Rejected */
+    color: white;
+}
+
+.status-btn.current-intern {
+    background-color: #1e4e8c !important; /* Blue for Current Intern */
+    color: white;
+}
+
+.status-btn.internship-complete {
+    background-color: #0d9488 !important; /* Teal for Internship Complete */
+    color: white;
+}
+/* Internship Students Status Section */
+#internship-students-status {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Same shadow as other sections */
+    width: 100%;
+    max-width: 1200px; /* Ensure the section matches the width of other sections */
+    margin-left: auto;
+    margin-right: auto; /* Centers the section */
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.filters select {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.student-status-item {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.student-status-item p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+.student-status-item select {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 180px;
+}
+
+.action-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.action-btn:hover {
+    background-color: #0056b3;
+}
+/* Internship Students Status Section */
+#internship-students-status {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Same shadow as other sections */
+    width: 100%;
+    max-width: 1200px; /* Ensure the section matches the width of other sections */
+    margin-left: auto;
+    margin-right: auto; /* Centers the section */
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.filters select {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.student-status-item {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.student-status-item p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+.student-status-item select {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 180px;
+}
+
+.action-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.action-btn:hover {
+    background-color: #0056b3;
+}
+/* Filters and Search bar */
+.filters {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.filters input {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Full width for a better look */
+    max-width: 500px; /* Limit the width */
+    margin-bottom: 20px; /* Space between search bar and students list */
+}
+
+/* Ensure the students list fits inside the section and does not overflow */
+.student-status-item {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.student-status-item p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+.student-status-item select {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 180px;
+}
+/* Add these styles to ensure that the search bar fits well within the section */
+.filters input {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+
+/* Adjust student status items to be visually consistent */
+.student-status-item {
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.student-status-item p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+.student-status-item select {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}

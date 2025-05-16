@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUC Internship System - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="data.js" defer></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f6f8; color: #343a40; }
+        .login-container h2 { color: #2c3e50; }
+        .btn { background-color: #007bff; color: white; font-weight: bold; padding: 0.75rem 1rem; border-radius: 0.25rem; transition: background-color 0.15s ease-in-out; width: 100%; }
+        .btn:hover { background-color: #0056b3; }
+        header, footer { background-color: #2c3e50; color: white; text-align: center; padding: 1rem 0; width: 100%; }
+        header { position: fixed; top: 0; left: 0; z-index: 1000; }
+        footer { position: fixed; bottom: 0; left: 0; z-index: 1000; }
+        main.login-main { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding-top: 80px; padding-bottom: 60px; box-sizing: border-box; }
+        .form-group label { color: #495057; }
+        .register-link a { color: #007bff; }
+        .register-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen"> 
+    <header>
+        <h1 class="text-2xl font-semibold">GUC Internship Program</h1>
+    </header>
+    <main class="login-main">
+        <div id="login-container" class="login-form bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+            <h2 id="login-title" class="text-2xl font-semibold mb-6 text-center">System Login</h2>
+            <div id="error-message" class="text-red-500 text-sm mb-4 text-center h-6"></div> 
+            <form id="login-form" class="space-y-4">
+                <div class="form-group">
+                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label> 
+                    <input type="email" id="email" name="email" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password:</label> 
+                    <input type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <div class="mt-4 text-center register-link"> 
+                <p class="text-sm text-gray-600">New company? <a href="company-register.html">Register here</a>.</p> 
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 GUC Internship System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('login-form');
+            const errorMessage = document.getElementById('error-message');
+
+            loginForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                errorMessage.textContent = '';
+                const email = loginForm.email.value.trim();
+                const password = loginForm.password.value.trim();
+
+                if (!email || !password) {
+                    errorMessage.textContent = 'Please enter both email and password.'; return;
+                }
+                
+                if (typeof getUsersFromStorage === 'undefined' || typeof getCompaniesFromStorage === 'undefined') {
+                    errorMessage.textContent = 'System error: Data service not available. Ensure data.js is loaded before this script.'; 
+                    console.error("getUsersFromStorage or getCompaniesFromStorage is not defined.");
+                    return;
+                }
+                
+                const users = getUsersFromStorage();
+                const allCompaniesData = getCompaniesFromStorage(); // Fetch all companies data
+                
+                if (!users || users.length === 0) {
+                    errorMessage.textContent = 'System error: No user data found.'; return;
+                }
+
+                let determinedRole = '';
+                let finalRedirectTarget = ''; // Use this for the final redirection URL
+                const emailDomain = email.substring(email.lastIndexOf('@') + 1).toLowerCase();
+
+              // Determine role and default dashboard
+if (emailDomain === 'student.guc.edu.eg') {
+    determinedRole = 'student';
+    finalRedirectTarget = 'student-dashboard.html';
+} else if (emailDomain === 'prostudent.guc.edu.eg') {
+    determinedRole = 'pro_student';
+    finalRedirectTarget = 'studentpro.html'; // <-- Changed from pro-student-dashboard.html
+} else if (emailDomain === 'faculty.guc.edu.eg') {
+    determinedRole = 'faculty';
+    finalRedirectTarget = 'faculty-dashboard.html'; 
+} else if (emailDomain === 'scad.guc.edu.eg') {
+    determinedRole = 'scad_office';
+    finalRedirectTarget = 'scad-office-dashboard.html';
+} else { 
+    determinedRole = 'company';
+    finalRedirectTarget = 'company-dashboard.html';
+}
+
+                const foundUser = users.find(user => 
+                    user.email.toLowerCase() === email.toLowerCase() &&
+                    user.password === password && 
+                    user.role === determinedRole
+                );
+
+                if (foundUser) {
+                    localStorage.setItem('currentUser', JSON.stringify({ 
+                        email: foundUser.email, 
+                        role: foundUser.role, 
+                        name: foundUser.name, 
+                        id: foundUser.id 
+                    }));
+                    
+                    // Check if company needs to complete profile
+                    if (foundUser.role === 'company') {
+                        const companyProfile = allCompaniesData.find(c => c.id === foundUser.id || c.email.toLowerCase() === foundUser.email.toLowerCase());
+                        if (companyProfile && companyProfile.profileNeedsCompletion === true) {
+                            finalRedirectTarget = 'company-register.html'; // Override redirect
+                            console.log(`Company ${foundUser.name} (ID: ${foundUser.id}) profile needs completion. Redirecting to company-register.html.`);
+                        } else if (!companyProfile && email.toLowerCase() === 'companyrep@company.com') {
+                             // This specific fallback is for the explicit test user if somehow their C1 profile was deleted from dummyCompanies
+                             console.warn(`User ${email} (companyrep@company.com) logged in as company but no matching company profile found. Forcing registration.`);
+                             finalRedirectTarget = 'company-register.html';
+                        }
+                    }
+                    
+                    errorMessage.textContent = `Login successful! Redirecting to ${finalRedirectTarget}...`;
+                    setTimeout(() => { 
+                        window.location.href = finalRedirectTarget;
+                    }, 1000);
+                } else {
+                    errorMessage.textContent = 'Invalid email, password, or role mismatch for the email domain.';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

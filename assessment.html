@@ -1,0 +1,76 @@
+assessment.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Take Assessment</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .box { border: 1px solid #ccc; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; }
+    h2 { color: #2b6cb0; }
+    button { margin-top: 15px; padding: 10px 15px; font-size: 16px; }
+    .score-box { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2 id="assessment-title">Assessment</h2>
+
+    <p><strong>Q1:</strong> What is 5 + 5?</p>
+    <input type="text" id="answer1" placeholder="Enter answer..." />
+
+    <div class="score-box" id="score-section" style="display:none;">
+      <p>Your Score: <span id="score-display"></span>/100</p>
+      <label><input type="checkbox" id="publish-score" /> Post score to profile</label><br>
+      <button onclick="saveScore()">Save Score</button>
+    </div>
+
+    <button onclick="submitAssessment()">Submit</button>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const testName = urlParams.get("test") || "Assessment";
+    document.getElementById("assessment-title").textContent = testName;
+
+    function submitAssessment() {
+  const answer = document.getElementById("answer1").value.trim();
+  const correct = (answer === "10");
+  const score = correct ? Math.floor(Math.random() * 11) + 90 : Math.floor(Math.random() * 30) + 50;
+
+  const profile = JSON.parse(localStorage.getItem("studentProfile"));
+  if (profile?.email) {
+  localStorage.setItem("assessment_" + profile.email, JSON.stringify({
+    name: testName,
+    score: score,
+    posted: false
+  }));
+}
+
+  localStorage.setItem("lastAssessment", JSON.stringify({
+    name: testName,
+    score: score,
+    posted: false
+  }));
+
+  document.getElementById("score-display").textContent = score;
+  document.getElementById("score-section").style.display = "block";
+}
+
+    function saveScore() {
+      const publish = document.getElementById("publish-score").checked;
+     const profile = JSON.parse(localStorage.getItem("studentProfile"));
+const key = "assessment_" + profile?.email;
+const assessment = JSON.parse(localStorage.getItem(key));
+      if (assessment) {
+        assessment.posted = publish;
+        localStorage.setItem(key, JSON.stringify(assessment));
+        alert("Score saved" + (publish ? " and posted to profile." : "."));
+        window.location.href = "studentpro.html"; // go back to dashboard
+      }
+    }
+  </script>
+
+</body>
+</html>

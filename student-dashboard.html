@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body id="student-dashboard-page">
+  <header class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center;">
+  <h1>Student Dashboard</h1>
+  <button id="logout-btn" class="action-btn logout-btn" style="margin-right: 20px;">Logout</button>
+</header>
+
+  <header class="dashboard-header">
+    <h1>Student Dashboard</h1>
+  </header>
+
+  <main class="dashboard-main">
+    <section id="student-profile" class="dashboard-section">
+      <h3>My Profile</h3>
+
+      <form id="profile-form">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="major">Major:</label>
+          <input type="text" id="major" name="major" required />
+        </div>
+        <div class="form-group">
+          <label for="semester">Semester:</label>
+          <input type="text" id="semester" name="semester" required />
+        </div>
+        <div class="form-group">
+          <label for="jobInterests">Job Interests (Keywords):</label>
+          <input type="text" id="jobInterests" name="jobInterests" required />
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label for="internshipExperience">Internships / Part-Time Jobs:<br><small>(Include company name, role, responsibilities, duration)</small></label>
+          <textarea id="internshipExperience" name="internshipExperience" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label for="collegeActivitiesDetails">College Activities:</label>
+          <textarea id="collegeActivitiesDetails" name="collegeActivitiesDetails" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="cv">Upload CV:</label>
+          <input type="url" id="cv" name="cv" placeholder="Paste your CV link" />
+        </div>
+
+        <div class="form-group">
+          <label for="coverLetter">Upload Cover Letter:</label>
+          <input type="url" id="coverLetter" name="coverLetter" placeholder="Paste cover letter link" />
+        </div>
+
+        <div class="form-group">
+          <label for="certificates">Upload Certificates:</label>
+          <input type="url" id="certificates" name="certificates" placeholder="Paste certificates link" />
+        </div>
+
+        <button type="submit" class="action-btn">Save Profile</button>
+      </form>
+
+      <div id="profile-display" style="display: none;">
+        <p><strong>Name:</strong> <span id="display-name"></span></p>
+        <p><strong>Email:</strong> <span id="display-email"></span></p>
+        <p><strong>Major:</strong> <span id="display-major"></span></p>
+        <p><strong>Semester:</strong> <span id="display-semester"></span></p>
+        <p><strong>Job Interests:</strong> <span id="display-jobInterests"></span></p>
+        <p><strong>Internship Experience:</strong> <span id="display-internshipExperience"></span></p>
+        <p><strong>College Activities:</strong> <span id="display-collegeActivitiesDetails"></span></p>
+        <p><strong>CV:</strong> <a id="display-cv" href="#" target="_blank">View CV</a></p>
+        <p><strong>Cover Letter:</strong> <a id="display-coverLetter" href="#" target="_blank">View Cover Letter</a></p>
+        <p><strong>Certificates:</strong> <a id="display-certificates" href="#" target="_blank">View Certificates</a></p>
+        <div class="action-row">
+          <button id="edit-profile-btn" class="action-btn">Edit Profile</button>
+          <div class="dropdown">
+            <button class="action-btn" id="suggestions-btn">Company Suggestions</button>
+            <ul id="suggestions-list" class="dropdown-content"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-section" style="margin-top: 30px;">
+      <h3>Available Majors & Semesters</h3>
+      <ul id="major-semester-list">
+        <li>Computer Science – Semester 1 to 8</li>
+        <li>Business Informatics – Semester 1 to 8</li>
+        <li>Media Engineering – Semester 1 to 8</li>
+        <li>Applied Arts – Semester 1 to 10</li>
+        <li>Architecture – Semester 1 to 10</li>
+        <li>Pharmacy – Semester 1 to 10</li>
+        <li>Engineering Design – Semester 1 to 8</li>
+      </ul>
+    </section>
+
+    
+
+    <section class="dashboard-section" style="margin-top: 30px;">
+  <h3>Available Internships</h3>
+
+  <div class="form-group" style="margin-bottom: 20px;">
+  <label for="filter-type">Filter Internships:</label>
+  <select id="filter-type">
+    <option value="all">All</option>
+    <option value="company">By Company</option>
+    <option value="title">By Job Title</option>
+  </select>
+
+  <select id="filter-value" style="display: none; margin-left: 10px;">
+    <!-- Populated dynamically -->
+  </select>
+</div>
+
+  <ul id="internship-list"></ul>
+</section>
+    <section class="dashboard-section" style="margin-top: 30px;">
+  <h3>My Applications</h3>
+
+  <div class="form-group">
+    <label for="filter-select">Filter by:</label>
+    <select id="filter-select" class="action-btn">
+      <option value="all">All</option>
+      <option value="current">Current Intern</option>
+      <option value="completed">Internship Complete</option>
+    </select>
+  </div>
+
+  <ul id="applied-list">
+    <!-- Filtered internship applications will appear here -->
+  </ul>
+</section>
+
+<!-- Moved Company Evaluations section below -->
+<section class="dashboard-section" style="margin-top: 30px;">
+  <h3>Company Evaluations</h3>
+  <form id="evaluation-form">
+    <div class="form-group">
+      <label for="evaluation-company">Company:</label>
+      <select id="evaluation-company" required></select>
+    </div>
+    <div class="form-group">
+      <label for="evaluation-text">Your Evaluation:</label>
+      <textarea id="evaluation-text" rows="4" required></textarea>
+    </div>
+    <div class="form-group">
+      <label>
+        <input type="checkbox" id="evaluation-recommend" />
+        I recommend this company
+      </label>
+    </div>
+    <button type="submit" class="action-btn">Save Evaluation</button>
+  </form>
+
+  <ul id="evaluations-list" style="margin-top: 20px;"></ul>
+</section>
+
+  <ul id="applied-list">
+    <!-- Filtered internship applications will appear here -->
+  </ul>
+</section>
+      <ul id="applied-list"></ul>
+    </section>
+    <section id="internship-reports" class="dashboard-section">
+  <h3>My Internship Report</h3>
+  <form id="report-form">
+    <div class="form-group">
+      <label for="report-title">Report Title:</label>
+      <input type="text" id="report-title" required />
+    </div>
+    <div class="form-group">
+      <label for="report-intro">Introduction:</label>
+      <textarea id="report-intro" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="report-body">Body:</label>
+      <textarea id="report-body" rows="6" required></textarea>
+    </div>
+    <button type="submit" class="action-btn">Save Report</button>
+  </form>
+
+  <div id="report-display" style="display: none; background-color: #f9f9f9; padding: 16px; border-radius: 6px; margin-top: 20px;">
+    <h4 id="display-report-title"></h4>
+    <p><strong>Introduction:</strong> <span id="display-report-intro"></span></p>
+    <p><strong>Body:</strong> <span id="display-report-body"></span></p>
+    <button id="edit-report-btn" class="action-btn">Edit Report</button>
+    <button id="delete-report-btn" class="action-btn reject-btn">Delete Report</button>
+    <button id="submit-report-btn" class="action-btn">Submit Final Report</button>
+  </div>
+</section>
+
+<section class="dashboard-section" style="margin-top: 30px;">
+  <h3>Courses That Helped Me During My Internship</h3>
+  <form id="courses-form">
+    <div class="form-group" id="course-options">
+      <label><input type="checkbox" value="Operating Systems" /> Operating Systems</label><br />
+      <label><input type="checkbox" value="Database Systems" /> Database Systems</label><br />
+      <label><input type="checkbox" value="Computer Networks" /> Computer Networks</label><br />
+      <label><input type="checkbox" value="Human-Computer Interaction" /> Human-Computer Interaction</label><br />
+      <label><input type="checkbox" value="Software Engineering" /> Software Engineering</label><br />
+    </div>
+    <button type="submit" class="action-btn">Save Selected Courses</button>
+  </form>
+
+  <div id="saved-courses-display" style="margin-top: 15px;"></div>
+</section>
+  </main>
+
+  <footer class="dashboard-footer">
+    <p>&copy; 2025 GUC Internship System. All rights reserved.</p>
+  </footer>
+
+  <script src="student.js"></script>
+</body>
+</html>

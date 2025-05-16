@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SCAD Officer Video Call</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+body {
+font-family: "Segoe UI", sans-serif;
+background-color: #f7f9fc;
+margin: 0;
+padding: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+}
+
+.call-container {
+background-color: white;
+padding: 30px 40px;
+border-radius: 12px;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+text-align: center;
+width: 520px;
+}
+
+h2 {
+color: #2b6cb0;
+margin-bottom: 10px;
+}
+
+#student-name {
+font-size: 16px;
+color: #444;
+margin-bottom: 20px;
+}
+
+.video-placeholder {
+width: 100%;
+height: 250px;
+background-color: #e2e8f0;
+border-radius: 10px;
+margin-bottom: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: #718096;
+font-size: 18px;
+border: 2px dashed #cbd5e0;
+}
+
+.call-controls {
+display: none;
+flex-wrap: wrap;
+justify-content: center;
+gap: 12px;
+margin-top: 20px;
+}
+
+button {
+padding: 12px 18px;
+font-size: 15px;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+transition: 0.2s ease-in-out;
+}
+
+button i {
+margin-right: 6px;
+}
+
+button:hover {
+opacity: 0.9;
+}
+
+.primary {
+background-color: #2b6cb0;
+color: white;
+}
+
+.danger {
+background-color: #e53e3e;
+color: white;
+}
+
+.share {
+background-color: #3182ce;
+color: white;
+}
+</style>
+</head>
+<body>
+
+<div class="call-container">
+<h2>SCAD Officer Video Call</h2>
+<div id="student-name">(Student)</div>
+
+<div class="video-placeholder" id="videoBox">
+Video feed (simulated)
+</div>
+
+<button class="primary" onclick="simulateIncomingCall()">
+<i class="fas fa-phone"></i> Simulate Incoming Call
+</button>
+
+<div class="call-controls" id="callControls">
+<button id="videoToggleBtn" class="primary" onclick="toggleVideo()">
+<i class="fas fa-video"></i> Disable Video
+</button>
+<button id="micToggleBtn" class="primary" onclick="toggleMic()">
+<i class="fas fa-microphone"></i> Mute
+</button>
+<button class="share" onclick="shareScreen()">
+<i class="fas fa-desktop"></i> Share Screen
+</button>
+<button class="danger" onclick="leaveCall()">
+<i class="fas fa-phone-slash"></i> Leave Call
+</button>
+</div>
+</div>
+
+<script>
+let videoEnabled = true;
+let micEnabled = true;
+let inCall = false;
+
+// Get student name from localStorage if available
+const profile = JSON.parse(localStorage.getItem("studentProfile"));
+const nameEl = document.getElementById("student-name");
+if (profile?.name) {
+nameEl.textContent = `(Student: ${profile.name})`;
+}
+
+function simulateIncomingCall() {
+const incoming = confirm("Incoming call from SCAD Office. Do you want to accept?");
+if (incoming) {
+startCall();
+} else {
+alert("You declined the call.");
+}
+}
+
+function startCall() {
+inCall = true;
+document.getElementById("callControls").style.display = "flex";
+alert("You are now in a call with the SCAD Officer.");
+}
+
+function toggleVideo() {
+if (!inCall) return;
+videoEnabled = !videoEnabled;
+const btn = document.getElementById("videoToggleBtn");
+const videoBox = document.getElementById("videoBox");
+
+btn.innerHTML = videoEnabled
+? `<i class="fas fa-video"></i> Disable Video`
+: `<i class="fas fa-video-slash"></i> Enable Video`;
+
+videoBox.textContent = videoEnabled ? "Video feed (simulated)" : "Video is turned off";
+videoBox.style.backgroundColor = videoEnabled ? "#e2e8f0" : "#a0aec0";
+}
+
+function toggleMic() {
+if (!inCall) return;
+micEnabled = !micEnabled;
+const btn = document.getElementById("micToggleBtn");
+
+btn.innerHTML = micEnabled
+? `<i class="fas fa-microphone"></i> Mute`
+: `<i class="fas fa-microphone-slash"></i> Unmute`;
+
+alert(`Microphone is now ${micEnabled ? "unmuted" : "muted"}.`);
+}
+
+function shareScreen() {
+if (!inCall) return;
+alert("Screen sharing started (simulated). Collaborate on plans and career options.");
+}
+
+function leaveCall() {
+if (!inCall) return;
+inCall = false;
+document.getElementById("callControls").style.display = "none";
+alert("You have left the call.");
+}
+</script>
+<a href="pages/video-call.html" class="nav-link">Video Call</a>
+
+</body>
+</html>
