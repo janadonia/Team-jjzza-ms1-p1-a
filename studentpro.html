@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Student Dashboard</title>
+ <link rel="stylesheet" href="studentpro.css" />
+</head>
+<body id="student-dashboard-page">
+ <header class="dashboard-header">
+ <h1>Studentpro Dashboard</h1>
+ <button id="logout-btn" class="action-btn" style="float: right; margin-top: -40px;">Logout</button>
+
+ </header>
+
+ <main class="dashboard-main">
+ <section id="student-profile" class="dashboard-section">
+ <h3>My Profile</h3>
+
+ <form id="profile-form">
+ <div class="form-group">
+ <label for="name">Name:</label>
+ <input type="text" id="name" name="name" required />
+ </div>
+ <div class="form-group">
+ <label for="email">Email:</label>
+ <input type="email" id="email" name="email" required />
+ </div>
+ <div class="form-group">
+ <label for="major">Major:</label>
+ <input type="text" id="major" name="major" required />
+ </div>
+ <div class="form-group">
+ <label for="semester">Semester:</label>
+ <input type="text" id="semester" name="semester" required />
+ </div>
+ <div class="form-group">
+ <label for="jobInterests">Job Interests (Keywords):</label>
+ <input type="text" id="jobInterests" name="jobInterests" required />
+ </div>
+
+ <div class="form-group" style="grid-column: 1 / -1;">
+ <label for="internshipExperience">Internships / Part-Time Jobs:<br><small>(Include company name, role, responsibilities, duration)</small></label>
+ <textarea id="internshipExperience" name="internshipExperience" rows="4" required></textarea>
+ </div>
+
+ <div class="form-group" style="grid-column: 1 / -1;">
+ <label for="collegeActivitiesDetails">College Activities:</label>
+ <textarea id="collegeActivitiesDetails" name="collegeActivitiesDetails" rows="3" required></textarea>
+ </div>
+
+ <div class="form-group">
+ <label for="cv">Upload CV:</label>
+ <input type="url" id="cv" name="cv" placeholder="Paste your CV link" />
+ </div>
+
+ <div class="form-group">
+ <label for="coverLetter">Upload Cover Letter:</label>
+ <input type="url" id="coverLetter" name="coverLetter" placeholder="Paste cover letter link" />
+ </div>
+
+ <div class="form-group">
+ <label for="certificates">Upload Certificates:</label>
+ <input type="url" id="certificates" name="certificates" placeholder="Paste certificates link" />
+ </div>
+
+ <button type="submit" class="action-btn">Save Profile</button>
+ </form>
+
+ <div id="profile-display" style="display: none;">
+ <p><strong>Name:</strong> <span id="display-name"></span></p>
+ <p><strong>Email:</strong> <span id="display-email"></span></p>
+ <p><strong>Major:</strong> <span id="display-major"></span></p>
+ <p><strong>Semester:</strong> <span id="display-semester"></span></p>
+ <p><strong>Job Interests:</strong> <span id="display-jobInterests"></span></p>
+ <p><strong>Internship Experience:</strong> <span id="display-internshipExperience"></span></p>
+ <p><strong>College Activities:</strong> <span id="display-collegeActivitiesDetails"></span></p>
+ <p><strong>CV:</strong> <a id="display-cv" href="#" target="_blank">View CV</a></p>
+ <p><strong>Cover Letter:</strong> <a id="display-coverLetter" href="#" target="_blank">View Cover Letter</a></p>
+ <p><strong>Certificates:</strong> <a id="display-certificates" href="#" target="_blank">View Certificates</a></p>
+ <div class="action-row">
+ <button id="edit-profile-btn" class="action-btn">Edit Profile</button>
+ <div class="dropdown">
+ <button class="action-btn" id="suggestions-btn">Company Suggestions</button>
+ <ul id="suggestions-list" class="dropdown-content"></ul>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <section class="dashboard-section" style="margin-top: 30px;">
+ <h3>Available Majors & Semesters</h3>
+ <ul id="major-semester-list">
+ <li>Computer Science – Semester 1 to 8</li>
+ <li>Business Informatics – Semester 1 to 8</li>
+ <li>Media Engineering – Semester 1 to 8</li>
+ <li>Applied Arts – Semester 1 to 10</li>
+ <li>Architecture – Semester 1 to 10</li>
+ <li>Pharmacy – Semester 1 to 10</li>
+ <li>Engineering Design – Semester 1 to 8</li>
+ </ul>
+ </section>
+
+ 
+
+ <section class="dashboard-section" style="margin-top: 30px;">
+ <h3>Available Internships</h3>
+
+ <div class="form-group" style="margin-bottom: 20px;">
+ <label for="filter-type">Filter Internships:</label>
+ <select id="filter-type">
+ <option value="all">All</option>
+ <option value="company">By Company</option>
+ <option value="title">By Job Title</option>
+ <option value="duration">By Duration</option>
+ </select>
+
+ <select id="filter-value" style="display: none; margin-left: 10px;">
+ <!-- Populated dynamically -->
+ </select>
+</div>
+
+ <ul id="internship-list"></ul>
+</section>
+ <section class="dashboard-section" style="margin-top: 30px;">
+ <h3>My Applications</h3>
+
+ <div class="form-group">
+ <label for="filter-select">Filter by:</label>
+ <select id="filter-select" class="action-btn">
+ <option value="all">All</option>
+ <option value="current">Current Intern</option>
+ <option value="completed">Internship Complete</option>
+ </select>
+ </div>
+
+ <ul id="applied-list">
+ <!-- Filtered internship applications will appear here -->
+ </ul>
+</section>
+
+<!-- Moved Company Evaluations section below -->
+<section class="dashboard-section" style="margin-top: 30px;">
+ <h3>Company Evaluations</h3>
+ <form id="evaluation-form">
+ <div class="form-group">
+ <label for="evaluation-company">Company:</label>
+ <select id="evaluation-company" required></select>
+ </div>
+ <div class="form-group">
+ <label for="evaluation-text">Your Evaluation:</label>
+ <textarea id="evaluation-text" rows="4" required></textarea>
+ </div>
+ <div class="form-group">
+ <label>
+ <input type="checkbox" id="evaluation-recommend" />
+ I recommend this company
+ </label>
+ </div>
+ <button type="submit" class="action-btn">Save Evaluation</button>
+ </form>
+
+ <ul id="evaluations-list" style="margin-top: 20px;"></ul>
+</section>
+
+ <ul id="applied-list">
+ <!-- Filtered internship applications will appear here -->
+ </ul>
+</section>
+ <ul id="applied-list"></ul>
+ </section>
+ <section id="internship-reports" class="dashboard-section">
+ <h3>My Internship Report</h3>
+ <form id="report-form">
+ <div class="form-group">
+ <label for="report-title">Report Title:</label>
+ <input type="text" id="report-title" required />
+ </div>
+ <div class="form-group">
+ <label for="report-intro">Introduction:</label>
+ <textarea id="report-intro" rows="3" required></textarea>
+ </div>
+ <div class="form-group">
+ <label for="report-body">Body:</label>
+ <textarea id="report-body" rows="6" required></textarea>
+ </div>
+ <button type="submit" class="action-btn">Save Report</button>
+ </form>
+
+ <div id="report-display" style="display: none; background-color: #f9f9f9; padding: 16px; border-radius: 6px; margin-top: 20px;">
+ <h4 id="display-report-title"></h4>
+ <p><strong>Introduction:</strong> <span id="display-report-intro"></span></p>
+ <p><strong>Body:</strong> <span id="display-report-body"></span></p>
+ <button id="edit-report-btn" class="action-btn">Edit Report</button>
+ <button id="delete-report-btn" class="action-btn reject-btn">Delete Report</button>
+ <button id="submit-report-btn" class="action-btn">Submit Final Report</button>
+ </div>
+</section>
+
+
+<section class="dashboard-section" style="margin-top: 30px;">
+ <h3>Request Video Call Appointment</h3>
+ <form id="appointment-form">
+ <div class="form-group">
+ <label for="appointment-reason">Reason for Call:</label>
+ <select id="appointment-reason" required>
+ <option value="">Select reason</option>
+ <option value="career">Career Guidance</option>
+ <option value="report">Report Clarifications</option>
+ </select>
+ </div>
+
+ <div class="form-group">
+ <label for="appointment-date">Preferred Date:</label>
+ <input type="date" id="appointment-date" required />
+ </div>
+
+ <button type="submit" class="action-btn">Request Appointment</button>
+ </form>
+
+ <!-- Status will be updated here -->
+ <div id="appointment-status" class="status-message"></div>
+ <div id="scad-status" style="margin-top: 10px;"></div>
+
+ <!-- ACCEPT / REJECT buttons -->
+ <div style="margin-top: 10px;">
+ <button onclick="approveAppointmentManually()">Accept Appointment</button>
+ <button onclick="rejectAppointmentManually()">Reject Appointment</button>
+ </div>
+
+ <!-- Start Call only shows if approved -->
+ <button
+ id="start-call-btn"
+ class="action-btn"
+ style="display: none; margin-top: 15px;"
+ onclick="window.open('video-call.html', '_blank')"
+>
+ Start video Call
+</button>
+ 
+</section>
+
+<section class="dashboard-section" style="margin-top: 30px;">
+ <h3>Courses That Helped Me During My Internship</h3>
+ <form id="courses-form">
+ <div class="form-group" id="course-options">
+ <label><input type="checkbox" value="Operating Systems" /> Operating Systems</label><br />
+ <label><input type="checkbox" value="Database Systems" /> Database Systems</label><br />
+ <label><input type="checkbox" value="Computer Networks" /> Computer Networks</label><br />
+ <label><input type="checkbox" value="Human-Computer Interaction" /> Human-Computer Interaction</label><br />
+ <label><input type="checkbox" value="Software Engineering" /> Software Engineering</label><br />
+ </div>
+ <button type="submit" class="action-btn">Save Selected Courses</button>
+ </form>
+
+ <div id="saved-courses-display" style="margin-top: 15px;"></div>
+</section>
+<section class="dashboard-section" style="margin-top: 30px;">
+ <h3>Online Assessments</h3>
+
+ <div id="assessment-list">
+ <p><strong>Available Assessments:</strong></p>
+ <ul>
+ <li>
+ <span>Logical Reasoning Test</span>
+ <a href="assessment.html?test=Logical%20Reasoning"><button>Take</button></a>
+ </li>
+ <li>
+ <span>Technical Skills Test</span>
+ <a href="assessment.html?test=technical%20skills"><button>Take</button></a>
+ </li>
+ <li>
+ <span>Soft Skills Survey</span>
+ <a href="assessment.html?test=soft%20Reasoning"><button>Take</button></a>
+ </li>
+ </ul>
+ </div>
+
+ <div id="assessment-result" style="display:none; margin-top: 20px;">
+ <p><strong>Completed:</strong> <span id="completed-assessment-name"></span></p>
+ <p><strong>Your Score:</strong> <span id="assessment-score"></span>/100</p>
+ <label>
+ <input type="checkbox" id="publish-score-checkbox" /> Post score to my profile
+ </label>
+ <button onclick="saveAssessmentResult()">Save</button>
+ </div>
+
+ <div id="posted-score-display" style="display:none; margin-top: 20px;"></div>
+</section>
+<section class="dashboard-section" style="margin-top: 30px;">
+ <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Career Workshops</h3>
+ <div id="workshop-list" class="workshop-grid"></div>
+</section>
+ </main>
+
+ <footer class="dashboard-footer">
+ <p>&copy; 2025 GUC Internship System. All rights reserved.</p>
+ </footer>
+
+ <script src="studentpro.js"></script>
+ <script src="data.js"></script>
+ <script src="script.js"></script>
+ <div id="assessment-form" style="display:none;">
+ <h4 id="assessment-title"></h4>
+ <p>Q: What is 2 + 2?</p>
+ <input type="number" id="user-answer" placeholder="Your Answer" />
+ <button onclick="submitAssessment()">Submit</button>
+</div>
+
+<div id="assessment-score" style="display:none;">
+ <h4>Assessment Score</h4>
+ <p id="score-text"></p>
+ <label>
+ <input type="checkbox" id="post-score" onchange="togglePostScore()" />
+ Post score to my profile
+ </label>
+</div>
+<script>
+ const posted = JSON.parse(localStorage.getItem("lastAssessment"));
+ if (posted) {
+ document.getElementById("completed-assessment-name").textContent = posted.name;
+ document.getElementById("assessment-score").textContent = posted.score;
+ document.getElementById("assessment-result").style.display = "block";
+
+ if (posted.posted) {
+ const postedDisplay = document.getElementById("posted-score-display");
+ postedDisplay.innerHTML = `<strong>Posted Score:</strong> ${posted.name} – ${posted.score}/100`;
+ postedDisplay.style.display = "block";
+ }
+ }
+
+ function saveAssessmentResult() {
+ const publish = document.getElementById("publish-score-checkbox").checked;
+ let data = JSON.parse(localStorage.getItem("lastAssessment"));
+ if (!data) return;
+
+ data.posted = publish;
+ localStorage.setItem("lastAssessment", JSON.stringify(data));
+
+ if (publish) {
+ document.getElementById("posted-score-display").style.display = "block";
+ document.getElementById("posted-score-display").innerHTML =
+ `<strong>Posted Score:</strong> ${data.name} – ${data.score}/100`;
+ } else {
+ document.getElementById("posted-score-display").style.display = "none";
+ }
+
+ alert("Assessment result saved" + (publish ? " and posted to your profile." : "."));
+ }
+</script>
+
+<section id="workshops-section">
+ <!-- Upcoming Workshops -->
+ <!-- Workshop Details View -->
+ <!-- Registration Button -->
+ <!-- Join / Watch Controls -->
+ <!-- Note-taking area -->
+ <!-- Certificate + Feedback -->
+</section>
+<script>
+  document.getElementById("logout-btn").addEventListener("click", function () {
+    // Optional: Clear session/local data
+    localStorage.removeItem("loggedInUser"); // or use clear() if needed
+    window.location.href = "login.html"; // replace with your login page path
+  });
+</script>
+
+</body>
+
+
+</html>
